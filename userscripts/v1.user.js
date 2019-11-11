@@ -304,7 +304,7 @@ function addSettingsMenu(isIndex) {
     function loadCustomCSS(link) {
         if ($("#customCSSLink"))
             $("#customCSSLink").remove();
-        var link = link || GM_getValue("customCSSLink");
+        var link = link || GM_getValue("customCSSLink") || "";
         if (link.length > 0)
             addCSS(link, true, "customCSSLink");
     }
@@ -312,22 +312,22 @@ function addSettingsMenu(isIndex) {
     function changeShoutboxSize(size) {
         if ($("#shoutboxSizeCSS"))
             $("#shoutboxSizeCSS").remove();
-        var size = size || GM_getValue("shoutboxSize");
+        var size = size || GM_getValue("shoutboxSize") || "213";
         addCSS(`#shout > div:nth-of-type(1) { height: ${size}px !important; }`, false, "shoutboxSizeCSS")
     }
 
     function changeShoutbox() {
-        $('.blockform')[0].style.display = GM_getValue("showShoutbox");
+        $('.blockform')[0].style.display = GM_getValue("showShoutbox")  || "";
     }
 
     function changeForumMotto() {
-        var motto = GM_getValue("forumMotto");
+        var motto = GM_getValue("forumMotto")  || "";
         $("#brddesc")[0].innerHTML = motto;
     }
     function addForumMottoCSS(css) {
         if ($("#forummottoCSS"))
             $("#forummottoCSS").remove();
-        var css = css || GM_getValue("forumMottoCSS");
+        var css = css || GM_getValue("forumMottoCSS") || "";
         if (css.length > 0)
             addCSS(css, false, "forummottoCSS");
     }

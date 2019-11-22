@@ -2,7 +2,7 @@
 // @name Custom Gamesense Themes
 // @namespace https://gamesense.pub/forums/*
 // @author Nexxed & AnonVodka
-// @version 1.0.9
+// @version 1.0.9.1
 // @match https://gamesense.pub/forums/*
 // @run-at document-start
 // @require https://code.jquery.com/jquery-3.4.1.min.js
@@ -11,12 +11,7 @@
 // @grant GM_getValue
 // ==/UserScript==
 
-// this is where you can edit which theme to use within the repository
-// if you want to use the dark.css theme, enter "dark"
-// otherwise, use the file name without the css extension (important)
-// See available themes here: https://github.com/Nexxed/Gamesense-Themes/tree/master/themes
-
-var userGroups = {
+const userGroups = {
     1: "Administrator",
     2: "Moderator",
     3: "Member",
@@ -24,9 +19,11 @@ var userGroups = {
     6: "Banned",
     7: "Lua Moderator",
     8: "Community Moderator"
-}
+};
 
-var defaultColors = {
+const presetCommitId = "fc348c086bb36eb78265772d07ebe9e8e9bff59b";
+
+const defaultColors = {
     "1 normal": "#b4e61e",
     "1 hovered": "#e4ff5e",
 
@@ -49,7 +46,7 @@ var defaultColors = {
     "8 hovered": "#ffe478",
 
     "9 postedBy": "#d4d4d4"
-}
+};
 
 function addCSS(css, isLink, extra) {
     var style = document.createElement(isLink ? 'link' : 'style');
@@ -66,7 +63,7 @@ function addCSS(css, isLink, extra) {
 }
 
 function addCustomTheme(theme) {
-    addCSS(`https://rawcdn.githack.com/Nexxed/Gamesense-Themes/fc348c086bb36eb78265772d07ebe9e8e9bff59b/themes/${theme}.css`, true, "themeURL");
+    addCSS(`https://rawcdn.githack.com/Nexxed/Gamesense-Themes/${presetCommitId}/themes/${theme}.css`, true, "themeURL");
 }
 
 function removeCustomTheme() {
@@ -136,6 +133,7 @@ function addSettingsMenu(isIndex) {
             font-size: 10px;
             font-family: verdana,helvetica,arial,sans-serif;
             margin-left: 4px;
+            padding: 5px;
         }
 
         .close_settings {
@@ -241,6 +239,17 @@ function addSettingsMenu(isIndex) {
             padding: 2px 16px;
             color: white;
         }
+
+        hr.nigger {
+            border-color: #505050;
+        }
+
+        #groupColourPreview {
+            line-height: 22px;
+            width: 7px;
+            display: inline-block;
+            border: 1px solid #3e3e3e;
+        }
     `, false, 'settingsMenuCSS')
 
     var htmlCode = `
@@ -256,21 +265,25 @@ function addSettingsMenu(isIndex) {
             </div>
             <div class='settingsMenu-body'>
                 <div id='settingsTab'>
-                    <input type='checkbox' id='toggleCustomTheme'>
-                    <label for='toggleCustomTheme'>Change forum theme</label>
-                    <br>
                     <input type='checkbox' id='toggleBetterLinks'>
                     <label for='toggleBetterLinks'>Open post links in new tab</label>
                     <br>
                     <input type='checkbox' id='toggleGroupLegend'>
-                    <label for='toggleGroupLegend'>Display usergroup legend</label>
+                    <label for='toggleGroupLegend'>Show usergroup legend</label>
+                    <br>
+                    <input type='checkbox' id='togglePageHeader'>
+                    <label for='togglePageHeader'>Force page header</label>
+                    <hr class="nigger">
+                    <input type='checkbox' id='toggleCustomTheme'>
+                    <label for='toggleCustomTheme'>Change forum theme</label>
                     <select id='customTheme'>
                         <option value='dark'>Dark</option>
                         <option value='dark-blue'>Dark blue</option>
                     </select>
-                    <input type='text' id='customCSS' placeholder='https://example.com/stylesheet.css' value=''> Custom css link<br>
+                    <hr class="nigger">
+                    <input type='text' id='customCSS' placeholder='https://example.com/stylesheet.css' value=''> Custom CSS link<br>
                     <input type='text' id='forumMotto' placeholder='A cool motto' value=''> Forum motto<br>
-                    <input type='text' id='forumMottoCSS' placeholder='color: #ffffff' value=''> Forum motto css<br>
+                    <input type='text' id='forumMottoCSS' placeholder='color: #ffffff' value=''> Forum motto CSS<br>
                     ${isIndex ? `
                     <input type='checkbox' id='showShoutbox'>
                     <label for='showShoutbox'>Show shoutbox</label><br>
@@ -278,21 +291,21 @@ function addSettingsMenu(isIndex) {
                     ` : ``}
                 </div>
                 <div id='colorsTab'>
-                    <input type='text' id='1 normal' value='#b4e61e'> Admin color<br>
-                    <input type='text' id='1 hovered' value='#e4ff5e'> Admin hovered color<br>
-                    <input type='text' id='2 normal' value='#fc0'> Mod color<br>
-                    <input type='text' id='2 hovered' value='#ffe478'> Mod hovered color<br>
-                    <input type='text' id='4 normal' value='#60a0dc'> Member color<br>
-                    <input type='text' id='4 hovered' value='#80d6ff'> Member hovered color<br>
-                    <input type='text' id='5 normal' value='#e61515'> Premium color<br>
-                    <input type='text' id='5 hovered' value='#ff4545'> Premium hovered color<br>
-                    <input type='text' id='6 normal' value='#60a0dc'> Banned color<br>
-                    <input type='text' id='6 hovered' value='#80d6ff'> Banned hovered color<br>
-                    <input type='text' id='7 normal' value='#58d794'> Lua-Mod color<br>
-                    <input type='text' id='7 hovered' value='#98fdc8'> Lua-Mod hovered color<br>
-                    <input type='text' id='8 normal' value='#fc0'> Com-Mod color<br>
-                    <input type='text' id='8 hovered' value='#ffe478'> Com-Mod hovered color<br>
-                    <input type='text' id='9 postedBy' value='#d4d4d4'> Posted by color<br>
+                    <input type='text' id='1 normal' value='#b4e61e'><div id="groupColourPreview">&nbsp;</div> Admin color<br>
+                    <input type='text' id='1 hovered' value='#e4ff5e'><div id="groupColourPreview">&nbsp;</div> Admin hovered color<br>
+                    <input type='text' id='2 normal' value='#fc0'><div id="groupColourPreview">&nbsp;</div> Mod color<br>
+                    <input type='text' id='2 hovered' value='#ffe478'><div id="groupColourPreview">&nbsp;</div> Mod hovered color<br>
+                    <input type='text' id='4 normal' value='#60a0dc'><div id="groupColourPreview">&nbsp;</div> Member color<br>
+                    <input type='text' id='4 hovered' value='#80d6ff'><div id="groupColourPreview">&nbsp;</div> Member hovered color<br>
+                    <input type='text' id='5 normal' value='#e61515'><div id="groupColourPreview">&nbsp;</div> Premium color<br>
+                    <input type='text' id='5 hovered' value='#ff4545'><div id="groupColourPreview">&nbsp;</div> Premium hovered color<br>
+                    <input type='text' id='6 normal' value='#60a0dc'><div id="groupColourPreview">&nbsp;</div> Banned color<br>
+                    <input type='text' id='6 hovered' value='#80d6ff'><div id="groupColourPreview">&nbsp;</div> Banned hovered color<br>
+                    <input type='text' id='7 normal' value='#58d794'><div id="groupColourPreview">&nbsp;</div> Lua-Mod color<br>
+                    <input type='text' id='7 hovered' value='#98fdc8'><div id="groupColourPreview">&nbsp;</div> Lua-Mod hovered color<br>
+                    <input type='text' id='8 normal' value='#fc0'><div id="groupColourPreview">&nbsp;</div> Com-Mod color<br>
+                    <input type='text' id='8 hovered' value='#ffe478'><div id="groupColourPreview">&nbsp;</div> Com-Mod hovered color<br>
+                    <input type='text' id='9 postedBy' value='#d4d4d4'><div id="groupColourPreview">&nbsp;</div> Posted by color<br>
                     <input type='button' id='saveBtn' value='Save colors'>
                     <input type='button' id='loadBtn' value='Load colors'>
                     <input type='button' id='defaultBtn' value='Reset to default'>
@@ -372,23 +385,19 @@ function addSettingsMenu(isIndex) {
             // initialize
             $("#onlinelist").parent().append($(`<dl class="clearb" id="grouplegend"><dt style="display: contents"><strong>Groups: </strong></dt></dl>`));
 
-            for(var i = 1; i < 10; i++)
-                if(userGroups[i])
-                    $("#grouplegend").append($(`<dd style="display: contents"><span class="usergroup-${i}">${userGroups[i]}</span>, </dd>`));
+            Object.keys(userGroups).map((index) => {
+                var name = userGroups[index];
+                $("#grouplegend").append($(`<dd style="display: contents"><span class="usergroup-${index}">${name}</span>, </dd>`));
+            });
 
             var e = $("#grouplegend").children().last();
             $(e).html($(e).html().slice(0, $(e).html().length-2));
         } else {
-            $(".blockpost .box .inbox .postbody .postright .postmsg a, div.postsignature.postmsg a").each(function () {
-                // ignore usergroup links
-                for (var i = 0; i < 10; i++)
-                    if ($(this).hasClass(`usergroup-${i}`)) return;
-
-                // make them open in a new tab when clicked
-                $(this).removeAttr("target");
-            })
+            $("#grouplegend").remove();
         }
     }
+
+    const pageHeader = enable => $(".gs-navbar, .gs-divider").css("display", enable ? "block" : "none");
 
     changeTheme();
     addPostedByCSS();
@@ -422,7 +431,8 @@ function addSettingsMenu(isIndex) {
             if (settings.id == group) {
                 $(b)[0].value = settings.color
             }
-            changeUsergroupCSS(settings.id, type, settings.color)
+            changeUsergroupCSS(settings.id, type, settings.color);
+            $(this).next().css("background", settings.color);
         });
     }
 
@@ -442,6 +452,7 @@ function addSettingsMenu(isIndex) {
     var toggleCustomTheme = document.getElementById("toggleCustomTheme");
     var toggleBetterLinks = document.getElementById("toggleBetterLinks");
     var toggleGroupLegend = document.getElementById("toggleGroupLegend");
+    var togglePageHeader = document.getElementById("togglePageHeader");
     var customTheme = document.getElementById("customTheme");
     var customCSS = document.getElementById("customCSS");
     var forumMotto = document.getElementById("forumMotto");
@@ -477,6 +488,10 @@ function addSettingsMenu(isIndex) {
     toggleGroupLegend.onclick = function () {
         GM_setValue('toggleGroupLegend', toggleGroupLegend.checked);
         groupLegend(GM_getValue('toggleGroupLegend'));
+    };
+    togglePageHeader.onclick = function() {
+        GM_setValue('togglePageHeader', togglePageHeader.checked);
+        pageHeader(GM_getValue('togglePageHeader'));
     };
 
     customTheme.onchange = function () {
@@ -527,7 +542,7 @@ function addSettingsMenu(isIndex) {
             }
             GM_setValue("shoutboxSize", size)
         };
-        shoutboxSize.value = GM_getValue("shoutboxSize");
+        shoutboxSize.value = GM_getValue("shoutboxSize") || null;
         showShoutbox.checked = GM_getValue("showShoutbox") == "block" ? true : false;
     }
 
@@ -536,6 +551,7 @@ function addSettingsMenu(isIndex) {
         var type = $(s.target)[0].id.split(" ")[1];
         var clr = $(s.target)[0].value;
         changeUsergroupCSS(group, type, clr);
+        $(this).next().css("background", clr);
     });
 
     saveBtn.onclick = function () {
@@ -559,12 +575,14 @@ function addSettingsMenu(isIndex) {
             var clr = defaultColors[`${group} ${type}`];
             $(b)[0].value = clr
             changeUsergroupCSS(group, type, clr)
+            $(this).next().css("background", clr);
         });
     }
 
-    toggleCustomTheme.checked = GM_getValue('toggleCustomTheme') || false;
-    toggleBetterLinks.checked = GM_getValue('toggleBetterLinks') || false;
-    toggleGroupLegend.checked = GM_getValue('toggleGroupLegend') || false;
+    toggleCustomTheme.checked = GM_getValue('toggleCustomTheme') !== undefined ? GM_getValue('toggleCustomTheme') : false;
+    toggleBetterLinks.checked = GM_getValue('toggleBetterLinks') !== undefined ? GM_getValue('toggleBetterLinks') : false;
+    toggleGroupLegend.checked = GM_getValue('toggleGroupLegend') !== undefined ? GM_getValue('toggleGroupLegend') : false;
+    togglePageHeader.checked = GM_getValue('togglePageHeader') !== undefined ? GM_getValue('togglePageHeader') : false;
     customTheme.value = GM_getValue('customTheme') || "";
     customCSS.value = GM_getValue("customCSSLink") || "";
     forumMotto.value = GM_getValue("forumMotto") || "";
@@ -572,6 +590,7 @@ function addSettingsMenu(isIndex) {
 
     betterLinks(toggleBetterLinks.checked);
     groupLegend(toggleGroupLegend.checked);
+    pageHeader(togglePageHeader.checked);
     loadUsergroupColors();
     changeShoutboxSize();
 })();

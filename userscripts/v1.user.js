@@ -48,6 +48,14 @@ const defaultColors = {
     "9 postedBy": "#d4d4d4"
 };
 
+const g_currentPage = (() => {
+    const regex = /pub\/forums\/(.*?)\.php/gm;
+    const matches = regex.exec(window.location.href);
+    if(matches && matches[1]) {
+        return matches[1];
+    } else return "index";
+})();
+
 function addCSS(css, isLink, extra) {
     var style = document.createElement(isLink ? 'link' : 'style');
     if (isLink) {

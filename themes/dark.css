@@ -35,6 +35,11 @@ html, body {
     background: #383838 !important;
 }
 
+/* fixes a mistake in the pmsnew.css file causing the message table to have unnecessary padding */
+#punpmsnew .block2col .blocktable .inbox, #punpmsnew .block2col .blockpost .inbox {
+    padding: 0 !important;
+}
+
 /* fixes weird checkbox style when viewing PMs */
 #punpmsnew .tce {
     padding: 3px 12px 3px 18px !important;

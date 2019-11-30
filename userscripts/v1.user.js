@@ -2,7 +2,7 @@
 // @name Custom Gamesense Themes
 // @namespace https://gamesense.pub/forums/*
 // @author Nexxed & AnonVodka
-// @version 1.1.0
+// @version 1.1.1
 // @match https://gamesense.pub/forums/*
 // @run-at document-start
 // @require https://code.jquery.com/jquery-3.4.1.min.js
@@ -10,6 +10,8 @@
 // @grant GM_setValue
 // @grant GM_getValue
 // ==/UserScript==
+
+const presetCommitId = "ea9f8b1a796a2f1920e4d8faedddcf3e829b13ab";
 
 const userGroups = {
     1: "Administrator",
@@ -20,8 +22,6 @@ const userGroups = {
     7: "Lua Moderator",
     8: "Community Moderator"
 };
-
-const presetCommitId = "fc348c086bb36eb78265772d07ebe9e8e9bff59b";
 
 const defaultColors = {
     "1 normal": "#b4e61e",
@@ -47,6 +47,19 @@ const defaultColors = {
 
     "9 postedBy": "#d4d4d4"
 };
+
+var g_currentUser = 0;
+$(() => {
+    var regex = /profile\.php\?id=(.*?)"/gm;
+    var matches = regex.exec($("#navprofile").html());
+
+    if(matches && matches[1]) {
+        g_currentUser = matches[1];
+    } else {
+        // some spooky gamers can change this variable so we only use it as a last-resort
+        g_currentUser = gs_user_id;
+    }
+});
 
 const g_currentPage = (() => {
     const regex = /pub\/forums\/(.*?)\.php/gm;
@@ -98,8 +111,8 @@ function changeUsergroupCSS(usergroup, type, color) {
 }
 
 async function addPostedByCSS() {
-    waitForKeyElements(".byuser", function () {
-        $(".byuser").each(function () {
+    waitForKeyElements(".byuser", function() {
+        $(".byuser").each(function() {
             var user = $(this).text().split("by ")[1];
             if (user) {
                 $(this).html(`by <a id="bisexual-user"></a>`);
@@ -131,7 +144,9 @@ function addSettingsMenu(isIndex) {
             margin: 15% auto;
             border: 1px solid #3e3e3e;
             padding-bottom: 20px;
-            width: 45%;
+            min-width: 310px;
+            max-width: 700px;
+            width: 70%;
         }
 
         .settingsMenu-content input {
@@ -264,7 +279,7 @@ function addSettingsMenu(isIndex) {
     <div id='settings_menu' class='settingsMenu'>
         <div class='settingsMenu-content'>
             <div class='settingsMenu-header'>
-                <h2>Custom theme settings
+                <h2>Custom forum settings
                     <span class='close_settings'>&times;</span>
                 </h2>
                 <input type='button' id='settingsBtn' value='Settings'>
@@ -279,14 +294,19 @@ function addSettingsMenu(isIndex) {
                     <input type='checkbox' id='toggleGroupLegend'>
                     <label for='toggleGroupLegend'>Show usergroup legend</label>
                     <br>
+                    <input type='checkbox' id='togglePostGroups'>
+                    <label for='togglePostGroups'>Enable usergroup tooltips in posts</label>
+                    <hr class="nigger">
                     <input type='checkbox' id='togglePageHeader'>
                     <label for='togglePageHeader'>Force page header</label>
-                    <hr class="nigger">
+                    <br>
+                    <input type='checkbox' id='toggleMinHeader'>
+                    <label for='toggleMinHeader'>Minimal page header</label>
+                    <br>
                     <input type='checkbox' id='toggleCustomTheme'>
                     <label for='toggleCustomTheme'>Change forum theme</label>
                     <select id='customTheme'>
                         <option value='dark'>Dark</option>
-                        <option value='dark-blue'>Dark blue</option>
                     </select>
                     <hr class="nigger">
                     <input type='text' id='customCSS' placeholder='https://example.com/stylesheet.css' value=''> Custom CSS link<br>
@@ -295,7 +315,7 @@ function addSettingsMenu(isIndex) {
                     ${isIndex ? `
                     <input type='checkbox' id='showShoutbox'>
                     <label for='showShoutbox'>Show shoutbox</label><br>
-                    <input type='text' id='shoutboxSize' placeholder='213' value='213'> Shoutbox size<br>
+                    <input type='text' id='shoutboxSize' placeholder='207' value='207'> Shoutbox size (px)<br>
                     ` : ``}
                 </div>
                 <div id='colorsTab'>
@@ -325,8 +345,7 @@ function addSettingsMenu(isIndex) {
     $('body').append(htmlCode)
 }
 
-(async function () {
-
+(async function() {
     function changeTheme() {
         if (GM_getValue('toggleCustomTheme') == true) {
             removeCustomTheme();
@@ -345,7 +364,7 @@ function addSettingsMenu(isIndex) {
     function changeShoutboxSize(size) {
         if ($("#shoutboxSizeCSS"))
             $("#shoutboxSizeCSS").remove();
-        var size = size || GM_getValue("shoutboxSize") || "213";
+        var size = size || GM_getValue("shoutboxSize") || "207";
         addCSS(`#shout > div:nth-of-type(1) { height: ${size}px !important; }`, false, "shoutboxSizeCSS")
     }
 
@@ -368,7 +387,7 @@ function addSettingsMenu(isIndex) {
 
     function betterLinks(enable) {
         if (enable) {
-            $(".blockpost .box .inbox .postbody .postright .postmsg a, div.postsignature.postmsg a").each(function () {
+            $(".blockpost .box .inbox .postbody .postright .postmsg a, div.postsignature.postmsg a").each(function() {
                 // ignore usergroup links
                 for (var i = 0; i < 10; i++)
                     if ($(this).hasClass(`usergroup-${i}`)) return;
@@ -377,7 +396,7 @@ function addSettingsMenu(isIndex) {
                 $(this).attr("target", "_blank");
             })
         } else {
-            $(".blockpost .box .inbox .postbody .postright .postmsg a, div.postsignature.postmsg a").each(function () {
+            $(".blockpost .box .inbox .postbody .postright .postmsg a, div.postsignature.postmsg a").each(function() {
                 // ignore usergroup links
                 for (var i = 0; i < 10; i++)
                     if ($(this).hasClass(`usergroup-${i}`)) return;
@@ -405,7 +424,41 @@ function addSettingsMenu(isIndex) {
         }
     }
 
-    const pageHeader = enable => $(".gs-navbar, .gs-divider").css("display", enable ? "block" : "none");
+    // for clarification, this is for displaying the tooltip
+    // on members' titles for their actual forum usergroup.
+    function displayPostGroups(enable) {
+        if(g_currentPage == "viewtopic") {
+            $(".usertitle").each(function() {
+                if(enable) {
+                    const regex = /<a class="usergroup-(.*?)"/gm;
+                    var matches = regex.exec($(this).prev().html());
+                    if(matches && matches[1]) {
+                        $(this).attr("title", userGroups[matches[1]]);
+                    }
+                } else $(this).removeAttr("title");
+            });
+        }
+    }
+
+    const pageHeader = enable => {
+        $(".gs-navbar, .gs-divider").css("display", enable ? "block" : "none");
+
+        if(enable && toggleMinHeader.checked) {
+            toggleMinHeader.checked = !enable;
+            GM_setValue('toggleMinHeader', !enable);
+            minHeader(!enable);
+            $(".gs-divider").css("display", "block");
+        }
+    }
+    const minHeader = enable => {
+        if(togglePageHeader.checked) {
+            togglePageHeader.checked = !enable;
+            GM_setValue('togglePageHeader', !enable);
+            pageHeader(!enable);
+        }
+
+        $(".gs-divider").css("display", enable ? "block" : "none");
+    }
 
     changeTheme();
     addPostedByCSS();
@@ -415,7 +468,7 @@ function addSettingsMenu(isIndex) {
         await new Promise(r => setTimeout(r, 0));
     }
 
-    var isIndex = window.location.href.indexOf("index.php") != -1 || window.location.href == "https://gamesense.pub/forums/";
+    var isIndex = g_currentPage == "index";
     if ($('.blockform')[0] != undefined && isIndex) {
         changeShoutbox();
     }
@@ -429,7 +482,7 @@ function addSettingsMenu(isIndex) {
         await new Promise(r => setTimeout(r, 0));
     }
 
-    $($($(".pun #brdwelcome ul.conl li").last()).children()[0]).append(` • <a href="#" id="open_settings">Custom theme settings</a>`)
+    $($($(".pun #brdwelcome ul.conl li").last()).children()[0]).append(` • <a href="#" id="open_settings">Custom forum settings</a>`)
 
     function loadUsergroupColors() {
         $("#colorsTab > input[type=text]").each(function (idx, b) {
@@ -460,28 +513,30 @@ function addSettingsMenu(isIndex) {
     var toggleCustomTheme = document.getElementById("toggleCustomTheme");
     var toggleBetterLinks = document.getElementById("toggleBetterLinks");
     var toggleGroupLegend = document.getElementById("toggleGroupLegend");
+    var togglePostGroups = document.getElementById("togglePostGroups");
     var togglePageHeader = document.getElementById("togglePageHeader");
+    var toggleMinHeader = document.getElementById("toggleMinHeader");
     var customTheme = document.getElementById("customTheme");
     var customCSS = document.getElementById("customCSS");
     var forumMotto = document.getElementById("forumMotto");
     var forumMottoCSS = document.getElementById("forumMottoCSS");
 
-    openSettingsMenu.onclick = function () {
+    openSettingsMenu.onclick = function() {
         settingsMenu.style.display = "block";
     };
-    closeButton.onclick = function () {
-        settingsMenu.style.display = "none";
-    };
 
-    settingsBtn.onclick = function () {
+    const closeMenu = () => settingsMenu.style.display = "none";
+    closeButton.onclick = closeMenu;
+
+    settingsBtn.onclick = function() {
         settingsTab.style.display = "block";
         colorsTab.style.display = "none";
     };
-    colorsBtn.onclick = function () {
+    colorsBtn.onclick = function() {
         colorsTab.style.display = "block";
         settingsTab.style.display = "none";
     };
-    toggleCustomTheme.onclick = function () {
+    toggleCustomTheme.onclick = function() {
         GM_setValue('toggleCustomTheme', toggleCustomTheme.checked);
         if (GM_getValue('toggleCustomTheme') == true) {
             changeTheme();
@@ -489,20 +544,28 @@ function addSettingsMenu(isIndex) {
             removeCustomTheme();
         }
     };
-    toggleBetterLinks.onclick = function () {
+    toggleBetterLinks.onclick = function() {
         GM_setValue('toggleBetterLinks', toggleBetterLinks.checked);
         betterLinks(GM_getValue('toggleBetterLinks'));
     };
-    toggleGroupLegend.onclick = function () {
+    toggleGroupLegend.onclick = function() {
         GM_setValue('toggleGroupLegend', toggleGroupLegend.checked);
         groupLegend(GM_getValue('toggleGroupLegend'));
     };
+    togglePostGroups.onclick = function() {
+        GM_setValue('togglePostGroups', togglePostGroups.checked);
+        displayPostGroups(GM_getValue('togglePostGroups'));
+    }
     togglePageHeader.onclick = function() {
         GM_setValue('togglePageHeader', togglePageHeader.checked);
         pageHeader(GM_getValue('togglePageHeader'));
     };
+    toggleMinHeader.onclick = function() {
+        GM_setValue('toggleMinHeader', toggleMinHeader.checked);
+        minHeader(GM_getValue('toggleMinHeader'));
+    };
 
-    customTheme.onchange = function () {
+    customTheme.onchange = function() {
         GM_setValue('customTheme', customTheme.value);
         changeTheme();
     }
@@ -562,7 +625,7 @@ function addSettingsMenu(isIndex) {
         $(this).next().css("background", clr);
     });
 
-    saveBtn.onclick = function () {
+    saveBtn.onclick = function() {
         $("#colorsTab > input[type=text]").each(function (idx, b) {
             var group = $(b)[0].id.split(" ")[0];
             var type = $(b)[0].id.split(" ")[1];
@@ -573,10 +636,10 @@ function addSettingsMenu(isIndex) {
             }))
         });
     }
-    loadBtn.onclick = function () {
+    loadBtn.onclick = function() {
         loadUsergroupColors()
     }
-    defaultBtn.onclick = function () {
+    defaultBtn.onclick = function() {
         $("#colorsTab > input[type=text]").each(function (idx, b) {
             var group = $(b)[0].id.split(" ")[0];
             var type = $(b)[0].id.split(" ")[1];
@@ -590,7 +653,9 @@ function addSettingsMenu(isIndex) {
     toggleCustomTheme.checked = GM_getValue('toggleCustomTheme') !== undefined ? GM_getValue('toggleCustomTheme') : false;
     toggleBetterLinks.checked = GM_getValue('toggleBetterLinks') !== undefined ? GM_getValue('toggleBetterLinks') : false;
     toggleGroupLegend.checked = GM_getValue('toggleGroupLegend') !== undefined ? GM_getValue('toggleGroupLegend') : false;
+    togglePostGroups.checked = GM_getValue('togglePostGroups') !== undefined ? GM_getValue('togglePostGroups') : false;
     togglePageHeader.checked = GM_getValue('togglePageHeader') !== undefined ? GM_getValue('togglePageHeader') : false;
+    toggleMinHeader.checked = GM_getValue('toggleMinHeader') !== undefined ? GM_getValue('toggleMinHeader') : false;
     customTheme.value = GM_getValue('customTheme') || "";
     customCSS.value = GM_getValue("customCSSLink") || "";
     forumMotto.value = GM_getValue("forumMotto") || "";
@@ -598,7 +663,9 @@ function addSettingsMenu(isIndex) {
 
     betterLinks(toggleBetterLinks.checked);
     groupLegend(toggleGroupLegend.checked);
+    displayPostGroups(togglePostGroups.checked);
     pageHeader(togglePageHeader.checked);
+    minHeader(toggleMinHeader.checked);
     loadUsergroupColors();
     changeShoutboxSize();
 })();

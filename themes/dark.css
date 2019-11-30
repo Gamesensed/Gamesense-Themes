@@ -35,6 +35,11 @@ html, body {
     background: #383838 !important;
 }
 
+/* fixes weird checkbox style when viewing PMs */
+#punpmsnew .tce {
+    padding: 3px 12px 3px 18px !important;
+}
+
 .pun .block .inbox, .pun .blockmenu .inbox {
     padding: 10px 12px !important;
 }
@@ -44,7 +49,7 @@ html, body {
     color: #d4d4d4 !important;
 }
 
-.pun .inbox thead .tc2, .pun .inbox thead .tc3, .pun .inbox thead .tcl, .pun .inbox thead .tcr {
+.pun .inbox thead .tc2, .pun .inbox thead .tc3, .pun .inbox thead .tcl, .pun .inbox thead .tcr, .pun .inbox thead .tce {
     border-bottom: 2px solid #95b806;
     background: #353535;
     color: #aaa;
@@ -68,10 +73,6 @@ html, body {
 }
 
 /* SHOUTBOX */
-#shout > div:nth-of-type(1) {
-    height: 213px !important;
-}
-
 #shout input {
     visibility: visible;
     background: #252525;

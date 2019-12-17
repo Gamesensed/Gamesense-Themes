@@ -2,7 +2,7 @@
 // @name Custom Gamesense Themes
 // @namespace https://gamesense.pub/forums/*
 // @author Nexxed & AnonVodka
-// @version 1.1.2
+// @version 1.2.0
 // @match https://gamesense.pub/forums/*
 // @run-at document-start
 // @require https://code.jquery.com/jquery-3.4.1.min.js
@@ -11,7 +11,7 @@
 // @grant GM_getValue
 // ==/UserScript==
 
-const presetCommitId = "97f337bc530a8f76a8eb15fc23a05e533c5371ed";
+const presetCommitId = "d55bb5c6c7124f64c74a35b1e3c1c736f79f64ca";
 
 const userGroups = {
     1: "Administrator",
@@ -306,7 +306,9 @@ function addSettingsMenu(isIndex) {
                     <input type='checkbox' id='toggleCustomTheme'>
                     <label for='toggleCustomTheme'>Change forum theme</label>
                     <select id='customTheme'>
+                        <option value='old'>Old default</option>
                         <option value='dark'>Dark</option>
+                        <option value='dark-blue'>Dark blue (deprecated)</option>
                     </select>
                     <hr class="nigger">
                     <input type='text' id='customCSS' placeholder='https://example.com/stylesheet.css' value=''> Custom CSS link<br>

@@ -124,6 +124,14 @@ async function addPostedByCSS() {
 
 function addSettingsMenu(isIndex) {
     addCSS(`
+        /* remove this when snow is removed */
+        div.pun {
+            position: relative !important;
+        }
+        .punwrap {
+            background: #151515 !important;
+        }
+
         .settingsMenu {
             display: none;
             position: fixed;
@@ -303,6 +311,9 @@ function addSettingsMenu(isIndex) {
                     <input type='checkbox' id='toggleMinHeader'>
                     <label for='toggleMinHeader'>Minimal page header</label>
                     <br>
+                    <input type='checkbox' id='toggleSnowEffect'>
+                    <label for='toggleSnowEffect'>Enable snowfall</label>
+                    <br>
                     <input type='checkbox' id='toggleCustomTheme'>
                     <label for='toggleCustomTheme'>Change forum theme</label>
                     <select id='customTheme'>
@@ -344,7 +355,8 @@ function addSettingsMenu(isIndex) {
         </div>
     </div>`;
 
-    $('body').append(htmlCode)
+    $('body').prepend(`<canvas id="snow" style="position: fixed;height: 100%;width: 100%;"></canvas>`);
+    $('body').append(htmlCode);
 }
 
 (async function() {
@@ -461,6 +473,9 @@ function addSettingsMenu(isIndex) {
 
         $(".gs-divider").css("display", enable ? "block" : "none");
     }
+    const snowEffect = enable => {
+        $("#snow").css("display", enable ? "inherit" : "none")
+    }
 
     changeTheme();
     addPostedByCSS();
@@ -518,6 +533,7 @@ function addSettingsMenu(isIndex) {
     var togglePostGroups = document.getElementById("togglePostGroups");
     var togglePageHeader = document.getElementById("togglePageHeader");
     var toggleMinHeader = document.getElementById("toggleMinHeader");
+    var toggleSnowEffect = document.getElementById("toggleSnowEffect")
     var customTheme = document.getElementById("customTheme");
     var customCSS = document.getElementById("customCSS");
     var forumMotto = document.getElementById("forumMotto");
@@ -566,6 +582,10 @@ function addSettingsMenu(isIndex) {
         GM_setValue('toggleMinHeader', toggleMinHeader.checked);
         minHeader(GM_getValue('toggleMinHeader'));
     };
+    toggleSnowEffect.onclick = function() {
+        GM_setValue('toggleSnowEffect', toggleSnowEffect.checked);
+        snowEffect(GM_getValue('toggleSnowEffect'));
+    }
 
     customTheme.onchange = function() {
         GM_setValue('customTheme', customTheme.value);
@@ -658,6 +678,7 @@ function addSettingsMenu(isIndex) {
     togglePostGroups.checked = GM_getValue('togglePostGroups') !== undefined ? GM_getValue('togglePostGroups') : false;
     togglePageHeader.checked = GM_getValue('togglePageHeader') !== undefined ? GM_getValue('togglePageHeader') : false;
     toggleMinHeader.checked = GM_getValue('toggleMinHeader') !== undefined ? GM_getValue('toggleMinHeader') : false;
+    toggleSnowEffect.checked = GM_getValue('toggleSnowEffect') !== undefined ? GM_getValue('toggleSnowEffect') : true;
     customTheme.value = GM_getValue('customTheme') || "";
     customCSS.value = GM_getValue("customCSSLink") || "";
     forumMotto.value = GM_getValue("forumMotto") || "";
@@ -668,6 +689,64 @@ function addSettingsMenu(isIndex) {
     displayPostGroups(togglePostGroups.checked);
     pageHeader(togglePageHeader.checked);
     minHeader(toggleMinHeader.checked);
+    snowEffect(toggleSnowEffect.checked);
     loadUsergroupColors();
     changeShoutboxSize();
+
+    (() => {
+        var c = document.getElementById('snow'),
+            $ = c.getContext("2d");
+        var w = c.width = window.innerWidth,
+            h = c.height = window.innerHeight;
+
+        Snowy();
+        function Snowy() {
+        var snow, arr = [];
+        var num = 300, tsc = 0.2, sp = 0.5;
+        var sc = 1.3, t = 0, mv = 20, min = 1;
+            for (var i = 0; i < num; ++i) {
+            snow = new Flake();
+            snow.y = Math.random() * (h + 50);
+            snow.x = Math.random() * w;
+            snow.t = Math.random() * (Math.PI * 2);
+            snow.sz = (100 / (10 + (Math.random() * 100))) * sc;
+            snow.sp = (Math.pow(snow.sz * .8, 2) * .15) * sp;
+            snow.sp = snow.sp < min ? min : snow.sp;
+            arr.push(snow);
+            }
+        go();
+        function go(){
+            window.requestAnimationFrame(go);
+            $.clearRect(0, 0, w, h);
+            $.fill();
+                for (var i = 0; i < arr.length; ++i) {
+                f = arr[i];
+                f.t += .05;
+                f.t = f.t >= Math.PI * 2 ? 0 : f.t;
+                f.y += f.sp;
+                f.x += Math.sin(f.t * tsc) * (f.sz * .3);
+                if (f.y > h + 50) f.y = -10 - Math.random() * mv;
+                if (f.x > w + mv) f.x = - mv;
+                if (f.x < - mv) f.x = w + mv;
+                f.draw();}
+        }
+        function Flake() {
+        this.draw = function() {
+            this.g = $.createRadialGradient(this.x, this.y, 0, this.x, this.y, this.sz);
+            this.g.addColorStop(0, 'hsla(255,255%,255%,1)');
+            this.g.addColorStop(1, 'hsla(255,255%,255%,0)');
+            $.moveTo(this.x, this.y);
+            $.fillStyle = this.g;
+            $.beginPath();
+            $.arc(this.x, this.y, this.sz, 0, Math.PI * 2, true);
+            $.fill();}
+        }
+        }
+        /*________________________________________*/
+        window.addEventListener('resize', function(){
+        c.width = w = window.innerWidth;
+        c.height = h = window.innerHeight;
+        }, false);
+
+    })();
 })();

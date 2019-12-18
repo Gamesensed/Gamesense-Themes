@@ -131,7 +131,6 @@ function addSettingsMenu(isIndex) {
         .punwrap {
             background: #151515 !important;
         }
-
         .settingsMenu {
             display: none;
             position: fixed;
@@ -145,7 +144,6 @@ function addSettingsMenu(isIndex) {
             background-color: rgba(0,0,0,0.4);
             font: 68.75%/1.4545em Verdana, Helvetica, Arial, sans-serif;
         }
-
         .settingsMenu-content {
             position: relative;
             background-color: #1b1b1b;
@@ -156,7 +154,6 @@ function addSettingsMenu(isIndex) {
             max-width: 700px;
             width: 70%;
         }
-
         .settingsMenu-content input {
             background-color: #212122;
             color: #ccc;
@@ -166,21 +163,18 @@ function addSettingsMenu(isIndex) {
             margin-left: 4px;
             padding: 5px;
         }
-
         .close_settings {
             color: #d4d4d4;
             float: right;
             font-size: 18px;
             font-weight: bold;
         }
-
         .close_settings:hover,
         .close_settings:focus {
             color: #d0d0d0;
             text-decoration: none;
             cursor: pointer;
         }
-
         .settingsMenu-header {
             padding: 2px 16px;
             color: white;
@@ -195,11 +189,9 @@ function addSettingsMenu(isIndex) {
             margin-left: 3px;
             margin-top: 3px;
         }
-
         .settingsMenu-body {
             padding: 2px 16px;
         }
-
         .settingsMenu-body #settingsTab {
             display: block;
         }
@@ -211,7 +203,6 @@ function addSettingsMenu(isIndex) {
             position: absolute;
             margin-top: 1px;
         }
-
         .settingsMenu-body #colorsTab {
             display: none;
         }
@@ -224,7 +215,6 @@ function addSettingsMenu(isIndex) {
         #colorsTab > input[type=text] {
             width: 50%;
         }
-
         .settingsMenu-body input[type=checkbox] {
             position: relative;
             cursor: pointer;
@@ -265,16 +255,13 @@ function addSettingsMenu(isIndex) {
             margin-left: 4px;
             margin-bottom: 3px;
         }
-
         .settingsMenu-footer {
             padding: 2px 16px;
             color: white;
         }
-
         hr.nigger {
             border-color: #505050;
         }
-
         #groupColourPreview {
             line-height: 22px;
             width: 7px;

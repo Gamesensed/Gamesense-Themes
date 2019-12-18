@@ -2,7 +2,7 @@
 // @name Custom Gamesense Themes
 // @namespace https://gamesense.pub/forums/*
 // @author Nexxed & AnonVodka
-// @version 1.2.1
+// @version 1.2.2
 // @match https://gamesense.pub/forums/*
 // @run-at document-start
 // @require https://code.jquery.com/jquery-3.4.1.min.js
@@ -131,6 +131,7 @@ function addSettingsMenu(isIndex) {
         .punwrap {
             background: #151515 !important;
         }
+
         .settingsMenu {
             display: none;
             position: fixed;
@@ -144,6 +145,7 @@ function addSettingsMenu(isIndex) {
             background-color: rgba(0,0,0,0.4);
             font: 68.75%/1.4545em Verdana, Helvetica, Arial, sans-serif;
         }
+
         .settingsMenu-content {
             position: relative;
             background-color: #1b1b1b;
@@ -154,6 +156,7 @@ function addSettingsMenu(isIndex) {
             max-width: 700px;
             width: 70%;
         }
+
         .settingsMenu-content input {
             background-color: #212122;
             color: #ccc;
@@ -163,18 +166,21 @@ function addSettingsMenu(isIndex) {
             margin-left: 4px;
             padding: 5px;
         }
+
         .close_settings {
             color: #d4d4d4;
             float: right;
             font-size: 18px;
             font-weight: bold;
         }
+
         .close_settings:hover,
         .close_settings:focus {
             color: #d0d0d0;
             text-decoration: none;
             cursor: pointer;
         }
+
         .settingsMenu-header {
             padding: 2px 16px;
             color: white;
@@ -189,9 +195,11 @@ function addSettingsMenu(isIndex) {
             margin-left: 3px;
             margin-top: 3px;
         }
+
         .settingsMenu-body {
             padding: 2px 16px;
         }
+
         .settingsMenu-body #settingsTab {
             display: block;
         }
@@ -203,6 +211,7 @@ function addSettingsMenu(isIndex) {
             position: absolute;
             margin-top: 1px;
         }
+
         .settingsMenu-body #colorsTab {
             display: none;
         }
@@ -215,6 +224,7 @@ function addSettingsMenu(isIndex) {
         #colorsTab > input[type=text] {
             width: 50%;
         }
+
         .settingsMenu-body input[type=checkbox] {
             position: relative;
             cursor: pointer;
@@ -255,13 +265,16 @@ function addSettingsMenu(isIndex) {
             margin-left: 4px;
             margin-bottom: 3px;
         }
+
         .settingsMenu-footer {
             padding: 2px 16px;
             color: white;
         }
+
         hr.nigger {
             border-color: #505050;
         }
+
         #groupColourPreview {
             line-height: 22px;
             width: 7px;
@@ -316,6 +329,7 @@ function addSettingsMenu(isIndex) {
                     <input type='checkbox' id='showShoutbox'>
                     <label for='showShoutbox'>Show shoutbox</label><br>
                     <input type='text' id='shoutboxSize' placeholder='207' value='207'> Shoutbox size (px)<br>
+                    <input type='text' id='shoutboxCSSLink' placeholder='https://example.com/stylesheet.css' value=''> Custom Shoutbox CSS link<br>
                     ` : ``}
                 </div>
                 <div id='colorsTab'>
@@ -367,6 +381,14 @@ function addSettingsMenu(isIndex) {
             $("#shoutboxSizeCSS").remove();
         var size = size || GM_getValue("shoutboxSize") || "207";
         addCSS(`#shout > div:nth-of-type(1) { height: ${size}px !important; }`, false, "shoutboxSizeCSS")
+    }
+
+    function changeShoutboxCSS(size) {
+        if ($("#shoutboxCSS"))
+            $("#shoutboxCSS").remove();
+        var size = size || GM_getValue("shoutboxCSS") || null;
+        if (size !== null)
+            addCSS(size, true, "shoutboxCSS")
     }
 
     function changeShoutbox() {
@@ -525,6 +547,7 @@ function addSettingsMenu(isIndex) {
     var customCSS = document.getElementById("customCSS");
     var forumMotto = document.getElementById("forumMotto");
     var forumMottoCSS = document.getElementById("forumMottoCSS");
+    var shoutboxCSS = document.getElementById("shoutboxCSSLink");
 
     openSettingsMenu.onclick = function() {
         settingsMenu.style.display = "block";
@@ -622,6 +645,16 @@ function addSettingsMenu(isIndex) {
             }
             GM_setValue("shoutboxSize", size)
         };
+        shoutboxCSS.onchange = function (s) {
+            var size = $(s.target)[0].value;
+            if (size.length == 0) {
+                if ($("#shoutboxCSS"))
+                    $("#shoutboxCSS").remove();
+            } else {
+                changeShoutboxCSS(size);
+            }
+            GM_setValue("shoutboxCSS", size)
+        };
         shoutboxSize.value = GM_getValue("shoutboxSize") || null;
         showShoutbox.checked = GM_getValue("showShoutbox") == "block" ? true : false;
     }
@@ -679,6 +712,7 @@ function addSettingsMenu(isIndex) {
     snowEffect(toggleSnowEffect.checked);
     loadUsergroupColors();
     changeShoutboxSize();
+    changeShoutboxCSS();
 
     (() => {
         var c = document.getElementById('snow'),

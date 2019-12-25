@@ -329,6 +329,7 @@ function addSettingsMenu(isIndex) {
                     <input type='checkbox' id='showShoutbox'>
                     <label for='showShoutbox'>Show shoutbox</label><br>
                     <input type='text' id='shoutboxSize' placeholder='207' value='207'> Shoutbox size (px)<br>
+                    <input type='text' id='shoutboxCSSLink' placeholder='https://example.com/stylesheet.css' value=''> Custom Shoutbox CSS link<br>
                     ` : ``}
                 </div>
                 <div id='colorsTab'>
@@ -382,6 +383,14 @@ function addSettingsMenu(isIndex) {
 
         var size = size || GM_getValue("shoutboxSize") || "207";
         addCSS(`#shout > div:nth-of-type(1) { height: ${size}px !important; }`, false, "shoutboxSizeCSS")
+    }
+
+    function changeShoutboxCSS(size) {
+        if ($("#shoutboxCSS"))
+            $("#shoutboxCSS").remove();
+        var size = size || GM_getValue("shoutboxCSS") || null;
+        if (size !== null)
+            addCSS(size, true, "shoutboxCSS")
     }
 
     function changeShoutbox() {
@@ -544,6 +553,7 @@ function addSettingsMenu(isIndex) {
     var customCSS = document.getElementById("customCSS");
     var forumMotto = document.getElementById("forumMotto");
     var forumMottoCSS = document.getElementById("forumMottoCSS");
+    var shoutboxCSS = document.getElementById("shoutboxCSSLink");
 
     openSettingsMenu.onclick = function() {
         settingsMenu.style.display = "block";
@@ -651,7 +661,20 @@ function addSettingsMenu(isIndex) {
 
             GM_setValue("shoutboxSize", size)
         };
+<<<<<<< HEAD
 
+=======
+        shoutboxCSS.onchange = function (s) {
+            var size = $(s.target)[0].value;
+            if (size.length == 0) {
+                if ($("#shoutboxCSS"))
+                    $("#shoutboxCSS").remove();
+            } else {
+                changeShoutboxCSS(size);
+            }
+            GM_setValue("shoutboxCSS", size)
+        };
+>>>>>>> 99700ffe4d91051c0ab18138f09e23dc437e5654
         shoutboxSize.value = GM_getValue("shoutboxSize") || null;
         showShoutbox.checked = GM_getValue("showShoutbox") == "block" ? true : false;
     }
@@ -712,6 +735,7 @@ function addSettingsMenu(isIndex) {
     snowEffect(toggleSnowEffect.checked);
     loadUsergroupColors();
     changeShoutboxSize();
+    changeShoutboxCSS();
 
     (() => {
         var c = document.getElementById('snow'),

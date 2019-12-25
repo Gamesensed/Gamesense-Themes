@@ -661,9 +661,6 @@ function addSettingsMenu(isIndex) {
 
             GM_setValue("shoutboxSize", size)
         };
-<<<<<<< HEAD
-
-=======
         shoutboxCSS.onchange = function (s) {
             var size = $(s.target)[0].value;
             if (size.length == 0) {
@@ -674,7 +671,6 @@ function addSettingsMenu(isIndex) {
             }
             GM_setValue("shoutboxCSS", size)
         };
->>>>>>> 99700ffe4d91051c0ab18138f09e23dc437e5654
         shoutboxSize.value = GM_getValue("shoutboxSize") || null;
         showShoutbox.checked = GM_getValue("showShoutbox") == "block" ? true : false;
     }

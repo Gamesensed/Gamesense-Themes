@@ -2,7 +2,7 @@
 // @name Custom Gamesense Themes
 // @namespace https://gamesense.pub/forums/*
 // @author Nexxed & AnonVodka
-// @version 1.2.2
+// @version 1.2.3
 // @match https://gamesense.pub/forums/*
 // @run-at document-start
 // @require https://code.jquery.com/jquery-3.4.1.min.js
@@ -742,7 +742,7 @@ function addSettingsMenu(isIndex) {
         Snowy();
         function Snowy() {
             var snow, arr = [];
-            var num = 1600, tsc = 0.2, sp = 0.5;
+            var num = 300, tsc = 0.2, sp = 0.5;
             var sc = 1.3, t = 0, mv = 20, min = 1;
 
             for (var i = 0; i < num; ++i) {

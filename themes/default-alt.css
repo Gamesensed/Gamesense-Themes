@@ -7,21 +7,35 @@
 /*div#brdmain {
     padding: 15px;
 }*/
+#postreview, .pun .block, .pun .block2col, .pun .blockform, .pun .blocktable {
+    background: #272726;
+}
+.pun h2 {
+    color: #ddd;
+    background: rgba(80, 80, 80, 0.3);
+    border: none;
+    border-left: 3px solid #95b806;
+    border-radius: 0px;
+}
+.pun .blocktable .box {
+    border: none;
+}
+
+/* Tables */
 .pun .inbox thead .tc2, .pun .inbox thead .tc3, .pun .inbox thead .tcl, .pun .inbox thead .tcr {
     color: #bbb !important;
     background-color: rgba(0, 0, 0, 0.05);
     padding: 7px 8px 7px 8px !important;
     border: none;
 }
-#postreview, .pun .block, .pun .block2col, .pun .blockform, .pun .blocktable {
-    background: #272726;
+.pun .roweven, .pun .rowodd {
+    transition: 250ms;
+    border-left: 2px solid transparent;
 }
-.pun h2 {
-    color: #ddd;
-    background: rgba(0, 0, 0, 0.3);
-    border: none;
-    border-left: 3px solid #95b806;
-    border-radius: 0px;
+.pun .roweven:hover, .pun .rowodd:hover {
+    transition: 250ms;
+    background-color: rgba(0, 0, 0, 0.2);
+    border-left: 2px solid #95b806;
 }
 
 /* Online Users & Group Legend */

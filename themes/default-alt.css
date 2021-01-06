@@ -1,3 +1,18 @@
+.gs-divider {
+    padding: 0;
+    margin: 0;
+    background: #1e5799;
+    background: -moz-linear-gradient(left, #1e5799 0, #f300ff 50%, #e0ff00 100%);
+    background: -webkit-gradient(linear, left top, right top, color-stop(0, #1e5799), color-stop(50%, #f300ff), color-stop(100%, #e0ff00));
+    background: -webkit-linear-gradient(left, #1e5799 0, #f300ff 50%, #e0ff00 100%);
+    background: -o-linear-gradient(left, #1e5799 0, #f300ff 50%, #e0ff00 100%);
+    background: -ms-linear-gradient(left, #1e5799 0, #f300ff 50%, #e0ff00 100%);
+    background: linear-gradient(to right, #1e5799 0, #f300ff 50%, #e0ff00 100%);
+    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#1e5799',  endColorstr='#e0ff00',  GradientType=1 );
+    height: 4px;
+    border-bottom: 1px solid #000;
+}
+
 /* Main */
 .punwrap {
     background: transparent !important;
@@ -21,12 +36,14 @@
 
 /* Inputs */
 input[type="text"] {
-    transition: 250ms;
     padding: 5px;
     margin-top: 4px;
     border: none;
     background: rgba(0, 0, 0, 0.2);
     border-bottom: 2px solid #3e3e3d;
+}
+input[type="text"] {
+    transition: 250ms;
 }
 input[type="text"]:hover {
     transition: 250ms;
@@ -81,11 +98,13 @@ select#emojiselector {
     padding: 7px 8px 7px 8px !important;
     border: none;
 }
-.pun .roweven.inew, .pun .rowodd.inew {
-    transition: 250ms;
+.pun .roweven.inew, .pun .roweven.iclosed, .pun .rowodd.inew, .pun .rowodd.iclosed {
     border-left: 2px solid transparent;
 }
-.pun .roweven.inew:hover, .pun .rowodd.inew:hover {
+.pun .roweven.inew, .pun .roweven.iclosed, .pun .rowodd.inew, .pun .rowodd.iclosed {
+    transition: 250ms;
+}
+.pun .roweven.inew:hover, .pun .roweven.iclosed:hover, .pun .rowodd.inew:hover, .pun .rowodd.iclosed:hover {
     transition: 250ms;
     background-color: rgba(0, 0, 0, 0.2);
     border-left: 2px solid #95b806;

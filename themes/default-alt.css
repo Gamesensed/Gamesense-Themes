@@ -1,34 +1,48 @@
+/* Main */
 .punwrap {
-    background: transparent;
+    background: transparent !important;
     backdrop-filter: blur(10px);
     -webkit-backdrop-filter: blur(10px);
 }
-
 div#brdmain {
     padding: 15px;
 }
+.pun .inbox thead .tc2, .pun .inbox thead .tc3, .pun .inbox thead .tcl, .pun .inbox thead .tcr {
+    background-color: rgb(89 124 6 / 1) !important;
+    color: #999 !important;
+    padding: 7px 8px 7px 8px !important;
+}
 
+/* Online Users & Group Legend */
+#brdstats.block > .box {
+    border: none;
+}
+#brdstats.block > .box > .inbox {
+    padding: 0 !important;
+}
+#brdstats > .conl {
+    float: unset !important;
+}
 #brdstats .conl {
     padding: 10px;
-    margin-top: 5px;
     background: rgba(0, 0, 0, 0.3);
     color: #fff;
-    border-left: 2px solid #95b806;
+    border-left: 3px solid #95b806;
 }
-
 dl#onlinelist {
-    background: rgba(0, 0, 0, 0.2);
+    background: rgba(0, 0, 0, 0.1);
     padding: 10px;
-    margin: 10px 0px 7px 0px;
+    margin: 0px 0px 0px 0px;
     border-left: 2px solid rgba(149, 184, 6, 0.5);
 }
-
-#onlinelist dt {
+dl#onlinelist dt {
     display: none;
 }
-
 dl#grouplegend {
-    background: rgba(0, 0, 0, 0.2);
+    background: rgba(0, 0, 0, 0.1);
     padding: 10px;
-    margin: 10px 0px 7px 0px;
+    border-left: 2px solid rgba(149, 184, 6, 0.5);
+}
+dl#grouplegend dt {
+    display: none;
 }

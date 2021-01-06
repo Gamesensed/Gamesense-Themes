@@ -124,14 +124,6 @@ async function addPostedByCSS() {
 
 function addSettingsMenu(isIndex) {
     addCSS(`
-        /* remove this when snow is removed */
-        div.pun {
-            position: relative !important;
-        }
-        .punwrap {
-            background: #151515 !important;
-        }
-
         .gs-divider {
             padding: 0;
             margin: 0;
@@ -455,7 +447,7 @@ $(() => {
 
                 Object.keys(userGroups).map((index) => {
                     var name = userGroups[index];
-                    $("#grouplegend").append($(`<dd style="display: contents"><span class="usergroup-${index}">${name}</span>, </dd>`));
+                    $("#grouplegend").append($(`<dd style="display: contents"><a href="#" class="usergroup-${index}">${name}</a>, </dd>`));
                 });
 
                 var e = $("#grouplegend").children().last();

@@ -19,7 +19,24 @@
 }
 
 
+/* Shoutbox */
+input#shouttext {
+    height: 30px;
+    margin-top: 0px !important;
+}
+div#shoutvol {
+    top: 4px;
+    line-height: 30px;
+}
+select#emojiselector {
+    top: -4px;
+}
+
+
 /* Tables */
+#adminconsole fieldset td, #adstats dd, #brdfooter #modcontrols, #postpreview, #viewprofile dd, .pun .blockmenu .box, .pun .forminfo, .pun td.tc2, .pun td.tc3, .pun td.tcmod {
+    background-color: transparent !important;
+}
 .pun .inbox thead .tc2, .pun .inbox thead .tc3, .pun .inbox thead .tcl, .pun .inbox thead .tcr {
     color: #bbb !important;
     background-color: rgba(0, 0, 0, 0.05);

@@ -59,7 +59,7 @@ select {
 
 /* Shoutbox */
 input#shouttext {
-    height: 30px;
+    height: 30px !important;
     margin-top: 0px !important;
 }
 div#shoutvol {

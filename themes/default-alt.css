@@ -19,13 +19,44 @@
 }
 
 
+/* Inputs */
+input[type="text"] {
+    transition: 250ms;
+    padding: 5px;
+    margin-top: 4px;
+    border: none;
+    background: rgba(0, 0, 0, 0.2);
+    border-bottom: 2px solid #3e3e3d;
+}
+input[type="text"]:hover {
+    transition: 250ms;
+    border-bottom: 2px solid rgba(149, 184, 6, 0.5);
+} input[type="text"]:focus, input[type="text"]:active {
+    color: #eee;
+    border-bottom: 2px solid #95b806;
+}
+input[type="submit"] {
+    padding: 5px 8px 5px 8px;
+}
+select {
+    padding: 5px;
+    margin-top: 4px;
+}
+
+
+/* Posting */
+.block > .pagepost {
+    padding: 10px;
+    background: rgba(0, 0, 0, 0.1);
+}
+
+
 /* Shoutbox */
 input#shouttext {
     height: 30px;
     margin-top: 0px !important;
 }
 div#shoutvol {
-    top: 4px !important;
     line-height: 30px;
 }
 select#emojiselector {
@@ -43,37 +74,16 @@ select#emojiselector {
     padding: 7px 8px 7px 8px !important;
     border: none;
 }
-.pun .roweven, .pun .rowodd {
+.pun .roweven.inew, .pun .rowodd.inew {
     transition: 250ms;
     border-left: 2px solid transparent;
 }
-.pun .roweven:hover, .pun .rowodd:hover {
+.pun .roweven.inew:hover, .pun .rowodd.inew:hover {
     transition: 250ms;
     background-color: rgba(0, 0, 0, 0.2);
     border-left: 2px solid #95b806;
 }
 
-
-/* Inputs */
-input[type="text"] {
-    transition: 250ms;
-    padding: 5px;
-    margin-top: 4px;
-    border: none;
-    background: rgba(0, 0, 0, 0.2);
-    border-bottom: 2px solid #3e3e3d;
-}
-input[type="text"]:hover {
-    transition: 250ms;
-    border-bottom: 2px solid rgba(149, 184, 6, 0.5);
-} input[type="text"]:focus, input[type="text"]:active {
-    color: #eee;
-    border-bottom: 2px solid #95b806;
-}
-select {
-    padding: 5px;
-    margin-top: 4px;
-}
 
 /* Online Users & Group Legend */
 #brdstats.block > .box {

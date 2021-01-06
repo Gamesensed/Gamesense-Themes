@@ -8,9 +8,10 @@
     padding: 15px;
 }*/
 .pun .inbox thead .tc2, .pun .inbox thead .tc3, .pun .inbox thead .tcl, .pun .inbox thead .tcr {
+    color: #bbb !important;
     background-color: rgba(0, 0, 0, 0.05);
-    color: #999 !important;
     padding: 7px 8px 7px 8px !important;
+    border: none;
 }
 #postreview, .pun .block, .pun .block2col, .pun .blockform, .pun .blocktable {
     background: #272726;

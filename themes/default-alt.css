@@ -8,7 +8,7 @@ div#brdmain {
     padding: 15px;
 }
 .pun .inbox thead .tc2, .pun .inbox thead .tc3, .pun .inbox thead .tcl, .pun .inbox thead .tcr {
-    background-color: rgb(89 124 6 / 1) !important;
+    background-color: rgba(0, 0, 0, 0.05);
     color: #999 !important;
     padding: 7px 8px 7px 8px !important;
 }
@@ -21,7 +21,7 @@ div#brdmain {
     padding: 0 !important;
 }
 #brdstats > .conl {
-    float: unset !important;
+    float: inherit !important;
 }
 #brdstats .conl {
     padding: 10px;

@@ -67,6 +67,3 @@ dl#grouplegend {
     border-left: 2px solid rgba(149, 184, 6, 0.5);
     padding: 10px;
 }
-dl#grouplegend dt {
-    display: none;
-}

@@ -4,13 +4,23 @@
     backdrop-filter: blur(10px);
     -webkit-backdrop-filter: blur(10px);
 }
-div#brdmain {
+/*div#brdmain {
     padding: 15px;
-}
+}*/
 .pun .inbox thead .tc2, .pun .inbox thead .tc3, .pun .inbox thead .tcl, .pun .inbox thead .tcr {
     background-color: rgba(0, 0, 0, 0.05);
     color: #999 !important;
     padding: 7px 8px 7px 8px !important;
+}
+#postreview, .pun .block, .pun .block2col, .pun .blockform, .pun .blocktable {
+    background: #272726;
+}
+.pun h2 {
+    color: #ddd;
+    background: rgba(0, 0, 0, 0.3);
+    border: none;
+    border-left: 3px solid #95b806;
+    border-radius: 0px;
 }
 
 /* Online Users & Group Legend */
@@ -22,24 +32,25 @@ div#brdmain {
 }
 #brdstats .conl {
     float: inherit !important;
-    padding: 10px;
-    background: rgba(0, 0, 0, 0.3);
+
     color: #fff;
+    background: rgba(0, 0, 0, 0.3);
     border-left: 3px solid #95b806;
+    padding: 10px;
 }
 dl#onlinelist {
     background: rgba(0, 0, 0, 0.1);
-    padding: 10px;
-    margin: 0px 0px 0px 0px;
     border-left: 2px solid rgba(149, 184, 6, 0.5);
+    margin: 0px 0px 0px 0px;
+    padding: 10px;
 }
 dl#onlinelist dt {
     display: none;
 }
 dl#grouplegend {
-    background: rgba(0, 0, 0, 0.1);
-    padding: 10px;
+    background: rgba(0, 0, 0, 0.2);
     border-left: 2px solid rgba(149, 184, 6, 0.5);
+    padding: 10px;
 }
 dl#grouplegend dt {
     display: none;

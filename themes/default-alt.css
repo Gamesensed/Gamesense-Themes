@@ -39,13 +39,17 @@
 
 /* Inputs */
 input[type="text"] {
+    transition: 250ms;
     padding: 5px;
     margin-top: 4px;
     border: none;
     background: rgba(0, 0, 0, 0.2);
     border-bottom: 2px solid #3e3e3d;
 }
-input[type="text"]:hover, input[type="text"]:focus, input[type="text"]:active {
+input[type="text"]:hover {
+    transition: 250ms;
+    border-bottom: 2px solid rgba(149, 184, 6, 0.5);
+} input[type="text"]:focus, input[type="text"]:active {
     color: #eee;
     border-bottom: 2px solid #95b806;
 }

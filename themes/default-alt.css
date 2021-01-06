@@ -25,7 +25,7 @@ input#shouttext {
     margin-top: 0px !important;
 }
 div#shoutvol {
-    top: 4px;
+    top: 4px !important;
     line-height: 30px;
 }
 select#emojiselector {

@@ -4,9 +4,6 @@
     backdrop-filter: blur(10px);
     -webkit-backdrop-filter: blur(10px);
 }
-/*div#brdmain {
-    padding: 15px;
-}*/
 #postreview, .pun .block, .pun .block2col, .pun .blockform, .pun .blocktable {
     background: #272726;
 }
@@ -20,6 +17,7 @@
 .pun .blocktable .box {
     border: none;
 }
+
 
 /* Tables */
 .pun .inbox thead .tc2, .pun .inbox thead .tc3, .pun .inbox thead .tcl, .pun .inbox thead .tcr {
@@ -36,6 +34,24 @@
     transition: 250ms;
     background-color: rgba(0, 0, 0, 0.2);
     border-left: 2px solid #95b806;
+}
+
+
+/* Inputs */
+input[type="text"] {
+    padding: 5px;
+    margin-top: 4px;
+    border: none;
+    background: rgba(0, 0, 0, 0.2);
+    border-bottom: 2px solid #3e3e3d;
+}
+input[type="text"]:hover, input[type="text"]:focus, input[type="text"]:active {
+    color: #eee;
+    border-bottom: 2px solid #95b806;
+}
+select {
+    padding: 5px;
+    margin-top: 4px;
 }
 
 /* Online Users & Group Legend */

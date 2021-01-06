@@ -271,7 +271,7 @@ function addSettingsMenu(isIndex) {
             color: white;
         }
 
-        hr.nigger {
+        hr.main {
             border-color: #505050;
         }
 
@@ -304,7 +304,7 @@ function addSettingsMenu(isIndex) {
                     <br>
                     <input type='checkbox' id='togglePostGroups'>
                     <label for='togglePostGroups'>Enable usergroup tooltips in posts</label>
-                    <hr class="nigger">
+                    <hr class="main">
                     <input type='checkbox' id='togglePageHeader'>
                     <label for='togglePageHeader'>Force page header</label>
                     <br>
@@ -321,7 +321,7 @@ function addSettingsMenu(isIndex) {
                         <option value='dark'>Dark</option>
                         <option value='dark-blue'>Dark blue (deprecated)</option>
                     </select>
-                    <hr class="nigger">
+                    <hr class="main">
                     <input type='text' id='customCSS' placeholder='https://example.com/stylesheet.css' value=''> Custom CSS link<br>
                     <input type='text' id='forumMotto' placeholder='A cool motto' value=''> Forum motto<br>
                     <input type='text' id='forumMottoCSS' placeholder='color: #ffffff' value=''> Forum motto CSS<br>

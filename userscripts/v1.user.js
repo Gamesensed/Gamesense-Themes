@@ -124,6 +124,10 @@ async function addPostedByCSS() {
 
 function addSettingsMenu(isIndex) {
     addCSS(`
+        /* this is required apparently */
+        div.pun {
+            position: relative !important;
+        }
         .gs-divider {
             padding: 0;
             margin: 0;

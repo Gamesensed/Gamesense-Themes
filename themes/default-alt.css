@@ -33,6 +33,7 @@ input[type="text"]:hover {
 } input[type="text"]:focus, input[type="text"]:active {
     color: #eee;
     border-bottom: 2px solid #95b806;
+    outline: 0;
 }
 input[type="submit"] {
     padding: 5px 8px 5px 8px;
@@ -40,6 +41,9 @@ input[type="submit"] {
 select {
     padding: 5px;
     margin-top: 4px;
+}
+input:focus, input:active {
+    outline: 0;
 }
 
 
@@ -67,6 +71,9 @@ div#shoutvol {
 }
 select#emojiselector {
     top: -4px;
+}
+#shout .rowEven, #shout .rowOdd {
+    background: rgba(0, 0, 0, 0.3)
 }
 
 

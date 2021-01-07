@@ -128,6 +128,7 @@ function addSettingsMenu(isIndex) {
         div.pun {
             position: relative !important;
         }
+
         .gs-divider {
             padding: 0;
             margin: 0;
@@ -152,14 +153,14 @@ function addSettingsMenu(isIndex) {
             width: 100%;
             height: 100%;
             overflow: hidden;
-            background-color: #020202;
             background-color: rgba(0,0,0,0.4);
             font: 68.75%/1.4545em Verdana, Helvetica, Arial, sans-serif;
         }
 
         .settingsMenu-content {
             position: relative;
-            background-color: #1b1b1b;
+            background-color: rgba(0, 0, 0, 0.3);
+            backdrop-filter: blur(7px);
             margin: 15% auto;
             border: 1px solid #3e3e3e;
             padding-bottom: 20px;

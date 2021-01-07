@@ -2,7 +2,7 @@
 // @name Custom Gamesense Themes
 // @namespace https://gamesense.pub/forums/*
 // @author Nexxed & AnonVodka
-// @version 1.3.2
+// @version 1.3.3
 // @match https://gamesense.pub/forums/*
 // @run-at document-start
 // @require https://code.jquery.com/jquery-3.4.1.min.js
@@ -11,7 +11,7 @@
 // @grant GM_getValue
 // ==/UserScript==
 
-const presetCommitId = "2bf08fa77eaaf665b4fbe250af4b23d2110513e8";
+const presetCommitId = "0b828f75e5775f048080e31af98d56334004c9ab";
 
 const userGroups = {
     1: "Administrator",

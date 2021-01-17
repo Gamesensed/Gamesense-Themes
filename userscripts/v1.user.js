@@ -2,7 +2,7 @@
 // @name Custom Gamesense Themes
 // @namespace https://gamesense.pub/forums/*
 // @author Nexxed & AnonVodka
-// @version 1.3.4
+// @version 1.3.5
 // @match https://gamesense.pub/forums/*
 // @run-at document-start
 // @require https://code.jquery.com/jquery-3.4.1.min.js
@@ -127,6 +127,14 @@ function addSettingsMenu(isIndex) {
         /* this is required apparently */
         div.pun {
             position: relative !important;
+        }
+
+        #brdtitle h1 {
+            padding: 3px 0px 4px 0px !important;
+        }
+
+        #brdtitle > .brddesc {
+            padding: 0px 0px 3px 0px;
         }
 
         .gs-divider {

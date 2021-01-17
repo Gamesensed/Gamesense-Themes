@@ -772,15 +772,15 @@ let observer = new MutationObserver(async (e) => {
                             $.fillStyle = this.g;
                             $.beginPath();
                             $.arc(this.x, this.y, this.sz, 0, Math.PI * 2, true);
-                            $.fill();}
+                            $.fill();
                         }
                     }
+                }
 
-                    window.addEventListener('resize', function(){
-                        c.width = w = window.innerWidth;
-                        c.height = h = window.innerHeight;
-                    }, false);
-
+                window.addEventListener('resize', function(){
+                    c.width = w = window.innerWidth;
+                    c.height = h = window.innerHeight;
+                }, false);
             })();
         })();
     })();

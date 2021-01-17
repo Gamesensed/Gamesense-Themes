@@ -377,408 +377,420 @@ function changeTheme() {
 
 changeTheme();
 
-$(() => {
-    (async function() {
-        $("body").prepend("<div class='gs-divider'></div>")
 
-        function loadCustomCSS(link) {
-            if ($("#customCSSLink"))
-                $("#customCSSLink").remove();
+let observer = new MutationObserver(async (e) => {
+    (() => {
+        (async function() {
+            $("body").prepend("<div class='gs-divider'></div>")
 
-            var link = link || GM_getValue("customCSSLink") || "";
-            if (link.length > 0)
-                addCSS(link, true, "customCSSLink");
-        }
-
-        function changeShoutboxSize(size) {
-            if ($("#shoutboxSizeCSS"))
-                $("#shoutboxSizeCSS").remove();
-
-            var size = size || GM_getValue("shoutboxSize") || "207";
-            addCSS(`#shout > div:nth-of-type(1) { height: ${size}px !important; }`, false, "shoutboxSizeCSS")
-        }
-
-        function changeShoutboxCSS(size) {
-            if ($("#shoutboxCSS"))
-                $("#shoutboxCSS").remove();
-            var size = size || GM_getValue("shoutboxCSS") || null;
-            if (size !== null)
-                addCSS(size, true, "shoutboxCSS")
-        }
-
-        function changeShoutbox() {
-            $('.blockform')[0].style.display = GM_getValue("showShoutbox") || "";
-        }
-
-        function changeForumMotto() {
-            var motto = GM_getValue("forumMotto") || "";
-            $("#brddesc")[0].innerHTML = motto;
-        }
-
-        function addForumMottoCSS(css) {
-            if ($("#forummottoCSS"))
-                $("#forummottoCSS").remove();
-            var css = css || GM_getValue("forumMottoCSS") || "";
-            if (css.length > 0)
-                addCSS(css, false, "forummottoCSS");
-        }
-
-        function betterLinks(enable) {
-            if (enable) {
-                $(".blockpost .box .inbox .postbody .postright .postmsg a, div.postsignature.postmsg a").each(function() {
-                    // ignore usergroup links
-                    for (var i = 0; i < 10; i++)
-                        if ($(this).hasClass(`usergroup-${i}`)) return;
-
-                    // make them open in a new tab when clicked
-                    $(this).attr("target", "_blank");
-                })
-            } else {
-                $(".blockpost .box .inbox .postbody .postright .postmsg a, div.postsignature.postmsg a").each(function() {
-                    // ignore usergroup links
-                    for (var i = 0; i < 10; i++)
-                        if ($(this).hasClass(`usergroup-${i}`)) return;
-
-                    // make them open in a new tab when clicked
-                    $(this).removeAttr("target");
-                })
-            }
-        }
-
-        function groupLegend(enable) {
-            if (enable && $("#onlinelist")[0]) {
-                // initialize
-                $("#onlinelist").parent().append($(`<dl class="clearb" id="grouplegend"><dt style="display: contents"><strong>Groups: </strong></dt></dl>`));
-
-                Object.keys(userGroups).map((index) => {
-                    var name = userGroups[index];
-                    $("#grouplegend").append($(`<dd style="display: contents"><a href="#" class="usergroup-${index}">${name}</a>, </dd>`));
-                });
-
-                var e = $("#grouplegend").children().last();
-                $(e).html($(e).html().slice(0, $(e).html().length-2));
-            } else {
-                $("#grouplegend").remove();
-            }
-        }
-
-        // for clarification, this is for displaying the tooltip
-        // on members' titles for their actual forum usergroup.
-        function displayPostGroups(enable) {
-            if(g_currentPage == "viewtopic") {
-                $(".usertitle").each(function() {
-                    if(enable) {
-                        const regex = /<a class="usergroup-(.*?)"/gm;
-                        var matches = regex.exec($(this).prev().html());
-                        if(matches && matches[1]) {
-                            $(this).attr("title", userGroups[matches[1]]);
-                        }
-                    } else $(this).removeAttr("title");
-                });
-            }
-        }
-
-        const pageHeader = enable => {
-            $(".gs-navbar, .gs-divider").css("display", enable ? "block" : "none");
-        }
-
-        const snowEffect = enable => {
-            $("#snow").css("display", enable ? "inherit" : "none")
-        }
-
-        addPostedByCSS();
-        loadCustomCSS();
-
-        while (!document.querySelector("body")) {
-            await new Promise(r => setTimeout(r, 0));
-        }
-
-        var isIndex = g_currentPage == "index";
-        if ($('.blockform')[0] != undefined && isIndex) {
-            changeShoutbox();
-        }
-
-        changeForumMotto();
-        addForumMottoCSS();
-
-        addSettingsMenu(isIndex);
-        while (!document.querySelector("#settings_menu")) {
-            addSettingsMenu(isIndex);
-            await new Promise(r => setTimeout(r, 0));
-        }
-
-        $($($(".pun #brdwelcome ul.conl li").last()).children()[0]).append(` • <a href="#" id="open_settings">Custom forum settings</a>`)
-
-        function loadUsergroupColors() {
-            $("#colorsTab > input[type=text]").each(function (idx, b) {
-                var group = $(b)[0].id.split(" ")[0];
-                var type = $(b)[0].id.split(" ")[1];
-                var settings = JSON.parse(GM_getValue(`usergroup-${group}-${type}`))
-
-                if (settings.id == group) {
-                    $(b)[0].value = settings.color
-                }
-
-                changeUsergroupCSS(settings.id, type, settings.color);
-                $(this).next().css("background", settings.color);
-            });
-        }
-
-        var openSettingsMenu = document.getElementById("open_settings");
-        var settingsMenu = document.getElementById("settings_menu");
-        var closeButton = document.getElementsByClassName("close_settings")[0];
-
-        var settingsBtn = document.getElementById("settingsBtn");
-        var colorsBtn = document.getElementById("colorsBtn");
-        var settingsTab = document.getElementById("settingsTab");
-        var colorsTab = document.getElementById("colorsTab");
-
-        var saveBtn = document.getElementById("saveBtn");
-        var loadBtn = document.getElementById("loadBtn");
-        var defaultBtn = document.getElementById("defaultBtn");
-
-        var toggleCustomTheme = document.getElementById("toggleCustomTheme");
-        var toggleBetterLinks = document.getElementById("toggleBetterLinks");
-        var toggleGroupLegend = document.getElementById("toggleGroupLegend");
-        var togglePostGroups = document.getElementById("togglePostGroups");
-        var togglePageHeader = document.getElementById("togglePageHeader");
-        var toggleSnowEffect = document.getElementById("toggleSnowEffect")
-        var customTheme = document.getElementById("customTheme");
-        var customCSS = document.getElementById("customCSS");
-        var forumMotto = document.getElementById("forumMotto");
-        var forumMottoCSS = document.getElementById("forumMottoCSS");
-        var shoutboxCSS = document.getElementById("shoutboxCSSLink");
-
-        openSettingsMenu.onclick = function() {
-            settingsMenu.style.display = "block";
-        };
-
-        const closeMenu = () => settingsMenu.style.display = "none";
-        closeButton.onclick = closeMenu;
-
-        settingsBtn.onclick = function() {
-            settingsTab.style.display = "block";
-            colorsTab.style.display = "none";
-        }
-
-        colorsBtn.onclick = function() {
-            colorsTab.style.display = "block";
-            settingsTab.style.display = "none";
-        }
-
-        toggleCustomTheme.onclick = function() {
-            GM_setValue('toggleCustomTheme', toggleCustomTheme.checked);
-
-            if (GM_getValue('toggleCustomTheme') == true) {
-                changeTheme();
-            } else removeCustomTheme();
-        }
-
-        toggleBetterLinks.onclick = function() {
-            GM_setValue('toggleBetterLinks', toggleBetterLinks.checked);
-            betterLinks(GM_getValue('toggleBetterLinks'));
-        }
-
-        toggleGroupLegend.onclick = function() {
-            GM_setValue('toggleGroupLegend', toggleGroupLegend.checked);
-            groupLegend(GM_getValue('toggleGroupLegend'));
-        }
-
-        togglePostGroups.onclick = function() {
-            GM_setValue('togglePostGroups', togglePostGroups.checked);
-            displayPostGroups(GM_getValue('togglePostGroups'));
-        }
-
-        togglePageHeader.onclick = function() {
-            GM_setValue('togglePageHeader', togglePageHeader.checked);
-            pageHeader(GM_getValue('togglePageHeader'));
-        }
-
-        toggleSnowEffect.onclick = function() {
-            GM_setValue('toggleSnowEffect', toggleSnowEffect.checked);
-            snowEffect(GM_getValue('toggleSnowEffect'));
-        }
-
-        customTheme.onchange = function() {
-            GM_setValue('customTheme', customTheme.value);
-            changeTheme();
-        }
-
-        customCSS.onchange = function (s) {
-            var link = customCSS.value;
-
-            if (link.length == 0) {
+            function loadCustomCSS(link) {
                 if ($("#customCSSLink"))
                     $("#customCSSLink").remove();
-            } else loadCustomCSS(link);
 
-            GM_setValue("customCSSLink", link)
-        }
+                var link = link || GM_getValue("customCSSLink") || "";
+                if (link.length > 0)
+                    addCSS(link, true, "customCSSLink");
+            }
 
-        forumMotto.onchange = function (s) {
-            GM_setValue('forumMotto', forumMotto.value);
-            changeForumMotto();
-        }
+            function changeShoutboxSize(size) {
+                if ($("#shoutboxSizeCSS"))
+                    $("#shoutboxSizeCSS").remove();
 
-        forumMottoCSS.onchange = function (s) {
-            var css = forumMottoCSS.value;
+                var size = size || GM_getValue("shoutboxSize") || "207";
+                addCSS(`#shout > div:nth-of-type(1) { height: ${size}px !important; }`, false, "shoutboxSizeCSS")
+            }
 
-            if (css.length == 0) {
+            function changeShoutboxCSS(size) {
+                if ($("#shoutboxCSS"))
+                    $("#shoutboxCSS").remove();
+                var size = size || GM_getValue("shoutboxCSS") || null;
+                if (size !== null)
+                    addCSS(size, true, "shoutboxCSS")
+            }
+
+            function changeShoutbox() {
+                $('.blockform')[0].style.display = GM_getValue("showShoutbox") || "";
+            }
+
+            function changeForumMotto() {
+                var motto = GM_getValue("forumMotto") || "";
+                $("#brddesc")[0].innerHTML = motto;
+            }
+
+            function addForumMottoCSS(css) {
                 if ($("#forummottoCSS"))
                     $("#forummottoCSS").remove();
-            } else addForumMottoCSS(css);
+                var css = css || GM_getValue("forumMottoCSS") || "";
+                if (css.length > 0)
+                    addCSS(css, false, "forummottoCSS");
+            }
 
-            GM_setValue("forumMottoCSS", css)
-        }
+            function betterLinks(enable) {
+                if (enable) {
+                    $(".blockpost .box .inbox .postbody .postright .postmsg a, div.postsignature.postmsg a").each(function() {
+                        // ignore usergroup links
+                        for (var i = 0; i < 10; i++)
+                            if ($(this).hasClass(`usergroup-${i}`)) return;
 
-        if (isIndex) {
-            var showShoutbox = document.getElementById("showShoutbox");
-            var shoutboxSize = document.getElementById("shoutboxSize");
-
-            showShoutbox.onclick = function (s) {
-                GM_setValue("showShoutbox", showShoutbox.checked ? "block" : "none")
-                changeShoutbox()
-            };
-
-            shoutboxSize.onchange = function (s) {
-                var size = $(s.target)[0].value;
-
-                if (size.length == 0) {
-                    if ($("#shoutboxSizeCSS"))
-                        $("#shoutboxSizeCSS").remove();
-                } else changeShoutboxSize(size);
-
-                GM_setValue("shoutboxSize", size)
-            };
-            shoutboxCSS.onchange = function (s) {
-                var size = $(s.target)[0].value;
-                if (size.length == 0) {
-                    if ($("#shoutboxCSS"))
-                        $("#shoutboxCSS").remove();
+                        // make them open in a new tab when clicked
+                        $(this).attr("target", "_blank");
+                    })
                 } else {
-                    changeShoutboxCSS(size);
+                    $(".blockpost .box .inbox .postbody .postright .postmsg a, div.postsignature.postmsg a").each(function() {
+                        // ignore usergroup links
+                        for (var i = 0; i < 10; i++)
+                            if ($(this).hasClass(`usergroup-${i}`)) return;
+
+                        // make them open in a new tab when clicked
+                        $(this).removeAttr("target");
+                    })
                 }
-                GM_setValue("shoutboxCSS", size)
+            }
+
+            function groupLegend(enable) {
+                if (enable && $("#onlinelist")[0]) {
+                    // initialize
+                    $("#onlinelist").parent().append($(`<dl class="clearb" id="grouplegend"><dt style="display: contents"><strong>Groups: </strong></dt></dl>`));
+
+                    Object.keys(userGroups).map((index) => {
+                        var name = userGroups[index];
+                        $("#grouplegend").append($(`<dd style="display: contents"><a href="#" class="usergroup-${index}">${name}</a>, </dd>`));
+                    });
+
+                    var e = $("#grouplegend").children().last();
+                    $(e).html($(e).html().slice(0, $(e).html().length-2));
+                } else {
+                    $("#grouplegend").remove();
+                }
+            }
+
+            // for clarification, this is for displaying the tooltip
+            // on members' titles for their actual forum usergroup.
+            function displayPostGroups(enable) {
+                if(g_currentPage == "viewtopic") {
+                    $(".usertitle").each(function() {
+                        if(enable) {
+                            const regex = /<a class="usergroup-(.*?)"/gm;
+                            var matches = regex.exec($(this).prev().html());
+                            if(matches && matches[1]) {
+                                $(this).attr("title", userGroups[matches[1]]);
+                            }
+                        } else $(this).removeAttr("title");
+                    });
+                }
+            }
+
+            const pageHeader = enable => {
+                $(".gs-navbar, .gs-divider").css("display", enable ? "block" : "none");
+            }
+
+            const snowEffect = enable => {
+                $("#snow").css("display", enable ? "inherit" : "none")
+            }
+
+            addPostedByCSS();
+            loadCustomCSS();
+
+            while (!document.querySelector("body")) {
+                await new Promise(r => setTimeout(r, 0));
+            }
+
+            var isIndex = g_currentPage == "index";
+            if ($('.blockform')[0] != undefined && isIndex) {
+                changeShoutbox();
+            }
+
+            changeForumMotto();
+            addForumMottoCSS();
+
+            addSettingsMenu(isIndex);
+            while (!document.querySelector("#settings_menu")) {
+                addSettingsMenu(isIndex);
+                await new Promise(r => setTimeout(r, 0));
+            }
+
+            $($($(".pun #brdwelcome ul.conl li").last()).children()[0]).append(` • <a href="#" id="open_settings">Custom forum settings</a>`)
+
+            function loadUsergroupColors() {
+                $("#colorsTab > input[type=text]").each(function (idx, b) {
+                    var group = $(b)[0].id.split(" ")[0];
+                    var type = $(b)[0].id.split(" ")[1];
+                    var settings = JSON.parse(GM_getValue(`usergroup-${group}-${type}`))
+
+                    if (settings.id == group) {
+                        $(b)[0].value = settings.color
+                    }
+
+                    changeUsergroupCSS(settings.id, type, settings.color);
+                    $(this).next().css("background", settings.color);
+                });
+            }
+
+            var openSettingsMenu = document.getElementById("open_settings");
+            var settingsMenu = document.getElementById("settings_menu");
+            var closeButton = document.getElementsByClassName("close_settings")[0];
+
+            var settingsBtn = document.getElementById("settingsBtn");
+            var colorsBtn = document.getElementById("colorsBtn");
+            var settingsTab = document.getElementById("settingsTab");
+            var colorsTab = document.getElementById("colorsTab");
+
+            var saveBtn = document.getElementById("saveBtn");
+            var loadBtn = document.getElementById("loadBtn");
+            var defaultBtn = document.getElementById("defaultBtn");
+
+            var toggleCustomTheme = document.getElementById("toggleCustomTheme");
+            var toggleBetterLinks = document.getElementById("toggleBetterLinks");
+            var toggleGroupLegend = document.getElementById("toggleGroupLegend");
+            var togglePostGroups = document.getElementById("togglePostGroups");
+            var togglePageHeader = document.getElementById("togglePageHeader");
+            var toggleSnowEffect = document.getElementById("toggleSnowEffect")
+            var customTheme = document.getElementById("customTheme");
+            var customCSS = document.getElementById("customCSS");
+            var forumMotto = document.getElementById("forumMotto");
+            var forumMottoCSS = document.getElementById("forumMottoCSS");
+            var shoutboxCSS = document.getElementById("shoutboxCSSLink");
+
+            openSettingsMenu.onclick = function() {
+                settingsMenu.style.display = "block";
             };
-            shoutboxSize.value = GM_getValue("shoutboxSize") || null;
-            showShoutbox.checked = GM_getValue("showShoutbox") == "block" ? true : false;
-        }
 
-        $("#colorsTab > input[type=text]").on("change", function (s) {
-            var group = $(s.target)[0].id.split(" ")[0];
-            var type = $(s.target)[0].id.split(" ")[1];
-            var clr = $(s.target)[0].value;
+            const closeMenu = () => settingsMenu.style.display = "none";
+            closeButton.onclick = closeMenu;
 
-            changeUsergroupCSS(group, type, clr);
-            $(this).next().css("background", clr);
-        });
+            settingsBtn.onclick = function() {
+                settingsTab.style.display = "block";
+                colorsTab.style.display = "none";
+            }
 
-        saveBtn.onclick = function() {
-            $("#colorsTab > input[type=text]").each(function (idx, b) {
-                var group = $(b)[0].id.split(" ")[0];
-                var type = $(b)[0].id.split(" ")[1];
-                var clr = $(b)[0].value;
+            colorsBtn.onclick = function() {
+                colorsTab.style.display = "block";
+                settingsTab.style.display = "none";
+            }
 
-                GM_setValue(`usergroup-${group}-${type}`, JSON.stringify({
-                    id: group,
-                    color: clr
-                }))
-            });
-        }
-        loadBtn.onclick = function() {
-            loadUsergroupColors()
-        }
-        defaultBtn.onclick = function() {
-            $("#colorsTab > input[type=text]").each(function (idx, b) {
-                var group = $(b)[0].id.split(" ")[0];
-                var type = $(b)[0].id.split(" ")[1];
-                var clr = defaultColors[`${group} ${type}`];
+            toggleCustomTheme.onclick = function() {
+                GM_setValue('toggleCustomTheme', toggleCustomTheme.checked);
 
-                $(b)[0].value = clr
-                changeUsergroupCSS(group, type, clr)
+                if (GM_getValue('toggleCustomTheme') == true) {
+                    changeTheme();
+                } else removeCustomTheme();
+            }
+
+            toggleBetterLinks.onclick = function() {
+                GM_setValue('toggleBetterLinks', toggleBetterLinks.checked);
+                betterLinks(GM_getValue('toggleBetterLinks'));
+            }
+
+            toggleGroupLegend.onclick = function() {
+                GM_setValue('toggleGroupLegend', toggleGroupLegend.checked);
+                groupLegend(GM_getValue('toggleGroupLegend'));
+            }
+
+            togglePostGroups.onclick = function() {
+                GM_setValue('togglePostGroups', togglePostGroups.checked);
+                displayPostGroups(GM_getValue('togglePostGroups'));
+            }
+
+            togglePageHeader.onclick = function() {
+                GM_setValue('togglePageHeader', togglePageHeader.checked);
+                pageHeader(GM_getValue('togglePageHeader'));
+            }
+
+            toggleSnowEffect.onclick = function() {
+                GM_setValue('toggleSnowEffect', toggleSnowEffect.checked);
+                snowEffect(GM_getValue('toggleSnowEffect'));
+            }
+
+            customTheme.onchange = function() {
+                GM_setValue('customTheme', customTheme.value);
+                changeTheme();
+            }
+
+            customCSS.onchange = function (s) {
+                var link = customCSS.value;
+
+                if (link.length == 0) {
+                    if ($("#customCSSLink"))
+                        $("#customCSSLink").remove();
+                } else loadCustomCSS(link);
+
+                GM_setValue("customCSSLink", link)
+            }
+
+            forumMotto.onchange = function (s) {
+                GM_setValue('forumMotto', forumMotto.value);
+                changeForumMotto();
+            }
+
+            forumMottoCSS.onchange = function (s) {
+                var css = forumMottoCSS.value;
+
+                if (css.length == 0) {
+                    if ($("#forummottoCSS"))
+                        $("#forummottoCSS").remove();
+                } else addForumMottoCSS(css);
+
+                GM_setValue("forumMottoCSS", css)
+            }
+
+            if (isIndex) {
+                var showShoutbox = document.getElementById("showShoutbox");
+                var shoutboxSize = document.getElementById("shoutboxSize");
+
+                showShoutbox.onclick = function (s) {
+                    GM_setValue("showShoutbox", showShoutbox.checked ? "block" : "none")
+                    changeShoutbox()
+                };
+
+                shoutboxSize.onchange = function (s) {
+                    var size = $(s.target)[0].value;
+
+                    if (size.length == 0) {
+                        if ($("#shoutboxSizeCSS"))
+                            $("#shoutboxSizeCSS").remove();
+                    } else changeShoutboxSize(size);
+
+                    GM_setValue("shoutboxSize", size)
+                };
+                shoutboxCSS.onchange = function (s) {
+                    var size = $(s.target)[0].value;
+                    if (size.length == 0) {
+                        if ($("#shoutboxCSS"))
+                            $("#shoutboxCSS").remove();
+                    } else {
+                        changeShoutboxCSS(size);
+                    }
+                    GM_setValue("shoutboxCSS", size)
+                };
+                shoutboxSize.value = GM_getValue("shoutboxSize") || null;
+                showShoutbox.checked = GM_getValue("showShoutbox") == "block" ? true : false;
+            }
+
+            $("#colorsTab > input[type=text]").on("change", function (s) {
+                var group = $(s.target)[0].id.split(" ")[0];
+                var type = $(s.target)[0].id.split(" ")[1];
+                var clr = $(s.target)[0].value;
+
+                changeUsergroupCSS(group, type, clr);
                 $(this).next().css("background", clr);
             });
-        }
 
-        toggleCustomTheme.checked = GM_getValue('toggleCustomTheme') !== undefined ? GM_getValue('toggleCustomTheme') : false;
-        toggleBetterLinks.checked = GM_getValue('toggleBetterLinks') !== undefined ? GM_getValue('toggleBetterLinks') : false;
-        toggleGroupLegend.checked = GM_getValue('toggleGroupLegend') !== undefined ? GM_getValue('toggleGroupLegend') : false;
-        togglePostGroups.checked = GM_getValue('togglePostGroups') !== undefined ? GM_getValue('togglePostGroups') : false;
-        togglePageHeader.checked = GM_getValue('togglePageHeader') !== undefined ? GM_getValue('togglePageHeader') : false;
-        toggleSnowEffect.checked = GM_getValue('toggleSnowEffect') !== undefined ? GM_getValue('toggleSnowEffect') : true;
-        customTheme.value = GM_getValue('customTheme') || "";
-        customCSS.value = GM_getValue("customCSSLink") || "";
-        forumMotto.value = GM_getValue("forumMotto") || "";
-        forumMottoCSS.value = GM_getValue("forumMottoCSS") || "";
+            saveBtn.onclick = function() {
+                $("#colorsTab > input[type=text]").each(function (idx, b) {
+                    var group = $(b)[0].id.split(" ")[0];
+                    var type = $(b)[0].id.split(" ")[1];
+                    var clr = $(b)[0].value;
 
-        betterLinks(toggleBetterLinks.checked);
-        groupLegend(toggleGroupLegend.checked);
-        displayPostGroups(togglePostGroups.checked);
-        pageHeader(togglePageHeader.checked);
-        snowEffect(toggleSnowEffect.checked);
-        loadUsergroupColors();
-        changeShoutboxSize();
-        changeShoutboxCSS();
+                    GM_setValue(`usergroup-${group}-${type}`, JSON.stringify({
+                        id: group,
+                        color: clr
+                    }))
+                });
+            }
+            loadBtn.onclick = function() {
+                loadUsergroupColors()
+            }
+            defaultBtn.onclick = function() {
+                $("#colorsTab > input[type=text]").each(function (idx, b) {
+                    var group = $(b)[0].id.split(" ")[0];
+                    var type = $(b)[0].id.split(" ")[1];
+                    var clr = defaultColors[`${group} ${type}`];
 
-        (() => {
-            var c = document.getElementById('snow'),
-                $ = c.getContext("2d");
-            var w = c.width = window.innerWidth,
-                h = c.height = window.innerHeight;
+                    $(b)[0].value = clr
+                    changeUsergroupCSS(group, type, clr)
+                    $(this).next().css("background", clr);
+                });
+            }
 
-            Snowy();
-            function Snowy() {
-                var snow, arr = [];
-                var num = 300, tsc = 0.2, sp = 0.5;
-                var sc = 1.3, t = 0, mv = 20, min = 1;
+            toggleCustomTheme.checked = GM_getValue('toggleCustomTheme') !== undefined ? GM_getValue('toggleCustomTheme') : false;
+            toggleBetterLinks.checked = GM_getValue('toggleBetterLinks') !== undefined ? GM_getValue('toggleBetterLinks') : false;
+            toggleGroupLegend.checked = GM_getValue('toggleGroupLegend') !== undefined ? GM_getValue('toggleGroupLegend') : false;
+            togglePostGroups.checked = GM_getValue('togglePostGroups') !== undefined ? GM_getValue('togglePostGroups') : false;
+            togglePageHeader.checked = GM_getValue('togglePageHeader') !== undefined ? GM_getValue('togglePageHeader') : false;
+            toggleSnowEffect.checked = GM_getValue('toggleSnowEffect') !== undefined ? GM_getValue('toggleSnowEffect') : true;
+            customTheme.value = GM_getValue('customTheme') || "";
+            customCSS.value = GM_getValue("customCSSLink") || "";
+            forumMotto.value = GM_getValue("forumMotto") || "";
+            forumMottoCSS.value = GM_getValue("forumMottoCSS") || "";
 
-                for (var i = 0; i < num; ++i) {
-                    snow = new Flake();
-                    snow.y = Math.random() * (h + 50);
-                    snow.x = Math.random() * w;
-                    snow.t = Math.random() * (Math.PI * 2);
-                    snow.sz = (100 / (10 + (Math.random() * 100))) * sc;
-                    snow.sp = (Math.pow(snow.sz * .8, 2) * .15) * sp;
-                    snow.sp = snow.sp < min ? min : snow.sp;
-                    arr.push(snow);
-                }
+            betterLinks(toggleBetterLinks.checked);
+            groupLegend(toggleGroupLegend.checked);
+            displayPostGroups(togglePostGroups.checked);
+            pageHeader(togglePageHeader.checked);
+            snowEffect(toggleSnowEffect.checked);
+            loadUsergroupColors();
+            changeShoutboxSize();
+            changeShoutboxCSS();
 
-                go();
-                function go() {
-                    window.requestAnimationFrame(go);
-                    $.clearRect(0, 0, w, h);
-                    $.fill();
-                    for (var i = 0; i < arr.length; ++i) {
-                        f = arr[i];
-                        f.t += .05;
-                        f.t = f.t >= Math.PI * 2 ? 0 : f.t;
-                        f.y += f.sp;
-                        f.x += Math.sin(f.t * tsc) * (f.sz * .3);
-                        if (f.y > h + 50) f.y = -10 - Math.random() * mv;
-                        if (f.x > w + mv) f.x = - mv;
-                        if (f.x < - mv) f.x = w + mv;
-                        f.draw();
+            (() => {
+                var c = document.getElementById('snow'),
+                    $ = c.getContext("2d");
+                var w = c.width = window.innerWidth,
+                    h = c.height = window.innerHeight;
+
+                Snowy();
+                function Snowy() {
+                    var snow, arr = [];
+                    var num = 300, tsc = 0.2, sp = 0.5;
+                    var sc = 1.3, t = 0, mv = 20, min = 1;
+
+                    for (var i = 0; i < num; ++i) {
+                        snow = new Flake();
+                        snow.y = Math.random() * (h + 50);
+                        snow.x = Math.random() * w;
+                        snow.t = Math.random() * (Math.PI * 2);
+                        snow.sz = (100 / (10 + (Math.random() * 100))) * sc;
+                        snow.sp = (Math.pow(snow.sz * .8, 2) * .15) * sp;
+                        snow.sp = snow.sp < min ? min : snow.sp;
+                        arr.push(snow);
                     }
-                }
 
-                function Flake() {
-                    this.draw = function() {
-                        this.g = $.createRadialGradient(this.x, this.y, 0, this.x, this.y, this.sz);
-                        this.g.addColorStop(0, 'hsla(255,255%,255%,1)');
-                        this.g.addColorStop(1, 'hsla(255,255%,255%,0)');
-                        $.moveTo(this.x, this.y);
-                        $.fillStyle = this.g;
-                        $.beginPath();
-                        $.arc(this.x, this.y, this.sz, 0, Math.PI * 2, true);
-                        $.fill();}
+                    go();
+                    function go() {
+                        window.requestAnimationFrame(go);
+                        $.clearRect(0, 0, w, h);
+                        $.fill();
+                        for (var i = 0; i < arr.length; ++i) {
+                            f = arr[i];
+                            f.t += .05;
+                            f.t = f.t >= Math.PI * 2 ? 0 : f.t;
+                            f.y += f.sp;
+                            f.x += Math.sin(f.t * tsc) * (f.sz * .3);
+                            if (f.y > h + 50) f.y = -10 - Math.random() * mv;
+                            if (f.x > w + mv) f.x = - mv;
+                            if (f.x < - mv) f.x = w + mv;
+                            f.draw();
+                        }
                     }
-                }
 
-                window.addEventListener('resize', function(){
-                    c.width = w = window.innerWidth;
-                    c.height = h = window.innerHeight;
-                }, false);
+                    function Flake() {
+                        this.draw = function() {
+                            this.g = $.createRadialGradient(this.x, this.y, 0, this.x, this.y, this.sz);
+                            this.g.addColorStop(0, 'hsla(255,255%,255%,1)');
+                            this.g.addColorStop(1, 'hsla(255,255%,255%,0)');
+                            $.moveTo(this.x, this.y);
+                            $.fillStyle = this.g;
+                            $.beginPath();
+                            $.arc(this.x, this.y, this.sz, 0, Math.PI * 2, true);
+                            $.fill();}
+                        }
+                    }
 
+                    window.addEventListener('resize', function(){
+                        c.width = w = window.innerWidth;
+                        c.height = h = window.innerHeight;
+                    }, false);
+
+            })();
         })();
     })();
-})
+
+    observer.disconnect();
+});
+
+observer.observe(document.documentElement, {
+    childList: true,
+    subtree: true,
+    attributes: false,
+    characterData: false
+});

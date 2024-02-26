@@ -510,24 +510,24 @@ var GST = unsafeWindow.GST = {};
     app.savedThemes.push({
         default: true,
         name: "Alternate",
-        link: "https://adorable-wealthy-earths.nex.wtf/styles/themes/default-alt.css"
+        link: "https://gsext.nex.wtf/styles/themes/default-alt.css"
     })
 
     app.savedThemes.push({
         default: true,
         name: "Alternate v2",
-        link: "https://adorable-wealthy-earths.nex.wtf/styles/themes/default-alt-v2.css"
+        link: "https://gsext.nex.wtf/styles/themes/default-alt-v2.css"
     })
 
     app.savedThemes.push({
         default: true,
         name: "Legacy (Original)",
-        link: "https://adorable-wealthy-earths.nex.wtf/styles/themes/legacy.css"
+        link: "https://gsext.nex.wtf/styles/themes/legacy.css"
     })
 
     app.savedScripts.push({
         default: true,
         name: "Online Members Tracker",
-        link: "https://adorable-wealthy-earths.nex.wtf/scripts/ext/online-api.js"
+        link: "https://gsext.nex.wtf/scripts/ext/online-api.js"
     })
 })(window)

@@ -35,7 +35,7 @@ function updateMembers() {
 }
 
 (function() {
-    let script = GST.registerScript("Online Tracker", "https://adorable-wealthy-earths.nex.wtf/scripts/ext/online-api.js", "Nexxed", "1.0.0")
+    let script = GST.registerScript("Online Tracker", "https://gsext.nex.wtf/scripts/ext/online-api.js", "Nexxed", "1.0.0")
 
     let options = {
         toggle: [ "Disabled", "Enabled" ],

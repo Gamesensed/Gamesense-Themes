@@ -5,8 +5,8 @@
 // @version                 2.0.0
 
 // @supportURL              https://github.com/Gamesensed/Gamesense-Themes
-// @updateURL               https://adorable-wealthy-earths.nex.wtf/loader.user.js
-// @downloadURL             https://adorable-wealthy-earths.nex.wtf/loader.user.js
+// @updateURL               https://gsext.nex.wtf/loader.user.js
+// @downloadURL             https://gsext.nex.wtf/loader.user.js
 
 // @match                   https://gamesense.pub/forums/*
 // @run-at                  document-start
@@ -15,10 +15,10 @@
 // @require                 https://code.jquery.com/jquery-3.6.0.slim.min.js
 // @require                 https://cdn.jsdelivr.net/npm/vue@2/dist/vue.js
 
-// @require                 https://adorable-wealthy-earths.nex.wtf/scripts/app.js
-// @resource    html        https://adorable-wealthy-earths.nex.wtf/layouts/window.html
-// @resource    css         https://adorable-wealthy-earths.nex.wtf/styles/window.css
-// @resource    feed        https://adorable-wealthy-earths.nex.wtf/feed.json
+// @require                 https://gsext.nex.wtf/scripts/app.js
+// @resource    html        https://gsext.nex.wtf/layouts/window.html
+// @resource    css         https://gsext.nex.wtf/styles/window.css
+// @resource    feed        https://gsext.nex.wtf/feed.json
 
 // @grant GM_setValue
 // @grant GM_getValue
@@ -100,7 +100,7 @@ window.jq = $.noConflict(true);
 
                 // patch the shoutbox ("v8" only) code with our own (for customizing the shoutbox)
                 if(jq(this).attr("src") == "/static/js/sb.js?v=8")
-                    jq(this).attr("src", "https://adorable-wealthy-earths.nex.wtf/scripts/sbCustom.js")
+                    jq(this).attr("src", "https://gsext.nex.wtf/scripts/sbCustom.js")
 
                 // set all types of script tags to the appropriate type
                 // otherwise, Vue complains

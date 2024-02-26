@@ -92,7 +92,7 @@ window.jq = $.noConflict(true);
             // patch the default font-awesome iconset with our own (and updated) one
             jq("link").each(function() {
                 if(jq(this).attr("href") == "/static/css/font-awesome.min.css")
-                    jq(this).attr("href", "https://cdn.rsm.gg/fontawesome-pro-5.14.0-web/css/all.min.css")
+                    jq(this).attr("href", "https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css")
             })
 
             // go through each script...

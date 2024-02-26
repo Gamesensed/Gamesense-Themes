@@ -2,7 +2,7 @@
 // @name                    Custom Gamesense Themes
 // @namespace               https://gamesense.pub/forums/*
 // @author                  Nexxed & AnonVodka
-// @version                 2.0.1-beta
+// @version                 2.0.2-beta
 
 // @supportURL              https://github.com/Gamesensed/Gamesense-Themes
 // @updateURL               https://gsext.nex.wtf/loader.user.js
@@ -104,7 +104,7 @@ window.jq = $.noConflict(true);
 
                 // set all types of script tags to the appropriate type
                 // otherwise, Vue complains
-                jq(this).attr("type", "application/javascript")
+                // jq(this).attr("type", "application/javascript")
             })
 
             settingsApp.start()

@@ -65,8 +65,11 @@ function updateMembers() {
         // if the tracker and "apply classes" option is enabled
         if(localStorage.getItem("cgs_online_classes_enabled") == 1) {
 
+            // get the stored members from local storage
+            const storedMembers = localStorage.getItem("cgs_online_members")
+
             // get the latest tracker information
-            let online = JSON.parse(localStorage.getItem("cgs_online_members") || "{ updated: 0, members: [] }")
+            let online = storedMembers ? JSON.parse(storedMembers) : { updated: 0, members: [] }
 
             // if this data has been recently updated in the last 15 minutes
             if(Date.now() - online.updated <= (1000 * 60 * 15)) {

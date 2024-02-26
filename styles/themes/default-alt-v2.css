@@ -21,8 +21,8 @@
     border-left: 3px solid #95b80690 !important;
     padding: 10px 15px 10px 15px;
 
-    background-image: radial-gradient(#6969ff1a 10%, transparent 50%);
-    background-size: calc(var(--pixel-h) * 2.5) calc(var(--pixel-h) * 2.5);
+    background-image: radial-gradient(#95b8061a 10%, transparent 50%);
+    background-size: calc(var(--pixel-h)* 2) calc(var(--pixel-h)* 2);
 }
 .firstpost h2 {
     border-left: 3px solid #95b806 !important;

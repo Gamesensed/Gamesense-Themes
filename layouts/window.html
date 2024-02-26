@@ -1,0 +1,209 @@
+<div class="gst-wrapper" id="settingsWindow" v-if="open">
+    <div class="gst-window">
+
+        <div class="gst-header">
+            <span class="gst-details">
+                <i class="fad fa-cogs"></i>
+                Custom GameSense Settings
+            </span>
+            <span class="gst-close">
+                <i class="fad fa-times" @click="toggleWindow(false)"></i>
+            </span>
+        </div>
+
+        <div class="gst-tabs">
+            <a href="javascript:void(0)" :class="['gst-tab', { active: activePage === 'home' } ]" @click="activePage = 'home'">
+                <i class="fad fa-house"></i>
+                Home
+            </a>
+            <a href="javascript:void(0)" :class="['gst-tab', { active: activePage === 'themes' } ]" @click="activePage = 'themes'">
+                <i class="fad fa-palette"></i>
+                Themes
+            </a>
+            <a href="javascript:void(0)" :class="['gst-tab', { active: activePage === 'scripts' } ]" @click="activePage = 'scripts'">
+                <i class="fad fa-scroll"></i>
+                Scripts
+            </a>
+            <a href="javascript:void(0)" :class="['gst-tab', 'end', { active: activePage === 'settings' } ]" @click="activePage = 'settings'">
+                <i class="fad fa-user-cog"></i>
+                Settings
+            </a>
+        </div>
+
+        <div class="gst-content">
+            <div class="gst-tabs" v-if="activePage === 'scripts'">
+
+                <a href="javascript:void(0)" :class="['gst-tab', { active: activeScriptPage === 'manager' } ]" @click="activeScriptPage = 'manager'">
+                    <i class="fad fa-scroll"></i>
+                    <span v-if="activeScriptPage === 'manager' || loadedScripts.length < 5">Script Manager</span>
+                </a>
+
+                <!-- List tabs for script UIs -->
+                <a v-for="script in loadedScripts" href="javascript:void(0)" :class="['gst-tab', { active: activeScriptPage.key === script.key } ]" @click="activeScriptPage = script" :key="script.key">
+                    {{ script.name }}
+                </a>
+            </div>
+
+            <div>
+                <div>
+                    <div class="gst-page-header">
+                        <h1 v-if="activePage !== 'scripts'">{{ getPageName }}</h1>
+                        <h1 v-else-if="activeScriptPage === 'manager'">Script Manager</h1>
+                        <h1 v-else>{{ activeScriptPage.name }}</h1>
+
+                        <div class="gst-page-actions" v-if="activePage === 'scripts' && activeScriptPage !== 'manager'">
+                            <a class="btn btn-xs btn-warning float-right" href="javascript:void(0)" @click="unloadScript(activeScriptPage.key)">
+                                Unload
+                            </a>
+                        </div>
+                    </div>
+                    <hr>
+
+                    <div class="gst-tab-page">
+
+                        <div v-if="activePage === 'home'" class="gst-page-feed">
+                            <div v-for="(post, index) in feed" :key="`feed-post-${index}`">
+                                <h3>
+                                    {{ post.title }}
+                                    <small class="text-muted">
+                                        <span v-if="post.author"><strong class="text-primary">{{ post.author }}</strong> |</span>
+                                        {{ getTimeFromNow(post.time) }}
+                                    </small>
+                                </h3>
+
+                                <p v-if="post.content instanceof String">{{ post.content }}</p>
+
+                                <li v-else-if="post.content instanceof Array" v-for="content in post.content">
+                                    {{ content }}
+                                </li>
+                            </div>
+                        </div>
+
+                        <div v-else-if="activePage === 'themes'" class="gst-page-themes">
+                            <div class="gst-add-item">
+                                <span class="gst-item-input">
+                                    <input type="text" maxlength="140" placeholder="Enter a URL..." style="width: 98%" v-model="inputTheme">
+                                </span>
+
+                                <span class="gst-item-button">
+                                    <a class="btn btn-primary" href="javascript:void(0)" @click="inputAddTheme">
+                                        Add Theme
+                                    </a>
+                                </span>
+                            </div>
+
+
+                            <div v-for="theme in sortedSavedThemes" class="gst-item">
+                                <div class="gst-item-details">
+                                    <span class="gst-item-name">
+                                        <h3>{{ theme.name }}</h3>
+                                    </span>
+                                    <span class="gst-item-link text-muted">
+                                        {{ theme.link }}
+                                    </span>
+                                </div>
+
+                                <div class="gst-item-actions">
+                                    <a v-if="!isThemeActive(theme.link)" class="btn btn-primary" href="javascript:void(0)" @click="addActiveTheme(theme.link)">
+                                        Load
+                                    </a>
+                                    <a v-else class="btn btn-warning" href="javascript:void(0)" @click="removeActiveTheme(theme.link)">
+                                        Unload
+                                    </a>
+                                    <a class="btn btn-danger" href="javascript:void(0)" @click="deleteSavedTheme(theme.link)">
+                                        Delete
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div v-else-if="activePage === 'scripts' && activeScriptPage === 'manager'" class="gst-page-scripts">
+                            <div class="gst-add-item">
+                                <span class="gst-item-input">
+                                    <input type="text" maxlength="140" placeholder="Enter a URL..." style="width: 98%" v-model="inputScript">
+                                </span>
+
+                                <span class="gst-item-button">
+                                    <a class="btn btn-primary" href="javascript:void(0)" @click="inputAddScript">
+                                        Add Script
+                                    </a>
+                                </span>
+                            </div>
+
+                            <div v-for="script in sortedSavedScripts" class="gst-item">
+                                <div class="gst-item-details">
+                                    <span class="gst-item-name">
+                                        <h3>
+                                            {{ script.name }}
+                                            <small v-if="script.version" class="text-muted">{{ script.version }}</small>
+                                            <small v-if="script.author" class="text-muted">by <strong>{{ script.author }}</strong></small>
+                                        </h3>
+                                    </span>
+                                    <span class="gst-item-link text-muted">
+                                        {{ script.link }}
+                                    </span>
+                                </div>
+
+                                <div class="gst-item-actions">
+                                    <a v-if="!isScriptActive(script.link)" class="btn btn-primary" href="javascript:void(0)" @click="addActiveScript(script.link)">
+                                        Load
+                                    </a>
+                                    <a v-else class="btn btn-warning" href="javascript:void(0)" @click="removeActiveScript(script.link)">
+                                        Unload
+                                    </a>
+                                    <a class="btn btn-danger" href="javascript:void(0)" @click="deleteSavedScript(script.link)">
+                                        Delete
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div v-else-if="activePage === 'scripts'" class="gst-page-scripts">
+
+                            <!-- Render intermediate UI for the selected script page -->
+                            <div class="gst-script-setting" v-for="setting in activeScriptPage.settings">
+                                <span class="gst-setting-details">
+                                    <span class="gst-setting-name">
+                                        {{ setting.name }}
+                                    </span>
+                                    <span v-if="setting.description" class="gst-setting-description">
+                                        {{ setting.description }}
+                                    </span>
+                                </span>
+
+                                <span class="gst-setting-element">
+
+                                    <!-- Regular button -->
+                                    <a v-if="setting.type.toLowerCase() === 'button'" class="btn btn-primary" href="javascript:void(0)"
+                                        @click="setting.onClick ? setting.onClick() : unhandledEvent(`${activeScriptPage.name} >> ${setting.name}`, 'button click')">
+                                        {{ setting.label }}
+                                    </a>
+
+                                    <!-- Regular textbox -->
+                                    <input v-if="setting.type.toLowerCase() === 'text'" type="text" maxlength="120" :placeholder="setting.placeholder || 'Input text here...'"
+                                        v-model="setting.value" @change="setting.onChange ? setting.onChange(setting.value) : unhandledEvent(setting)">
+
+                                    <!-- Regular select -->
+                                    <select v-if="setting.type.toLowerCase() === 'select'" v-model="setting.multiple ? setting.values : setting.value" :multiple="setting.multiple || false"
+                                        @change="setting.onChange ? setting.onChange(setting.value) : unhandledEvent(setting)">
+                                        <option v-for="(opt, index) in setting.options" :value="index">
+                                            {{ opt }}
+                                        </option>
+                                    </select>
+                                </span>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="gst-footer">
+            <span>
+                Made with <i class="fad fa-heart text-danger"></i> by <a href="https://gamesense.pub/forums/profile.php?id=3046">Nexxed</a>
+            </span>
+        </div>
+
+    </div>
+<div>

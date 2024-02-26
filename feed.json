@@ -1,0 +1,16 @@
+[
+    {
+        "author": "Nexxed",
+        "title": "Update v2.0.0",
+
+        "content": [
+            "Added new emojis to the shoutbox that directly replace the existing ones (new emoji picker coming soon, maybe)",
+            "Added the ability to save custom themes and scripts to a personal list for later selection",
+            "Added support for loading more than one theme",
+            "Added scripting API with support for interface elements",
+            "Updated to a new UI framework, powered by Vue.js for seamless integration"
+        ],
+
+        "time": "2021-10-02T18:57:38+0000"
+    }
+]

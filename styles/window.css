@@ -1,0 +1,530 @@
+@import url('https://fonts.googleapis.com/css2?family=Titillium+Web:ital,wght@0,200;0,300;0,400;0,600;0,700;0,900;1,200;1,300;1,400;1,600;1,700&display=swap');
+
+:root {
+    /* These two are needed for reliable width/height scaling */
+    --pixel-w: calc(1 / 1280 * 100vw);
+    --pixel-h: calc(1 / 720 * 100vh);
+
+    --primary-color: #95b806;
+
+    --wrapper-background: rgba(0, 0, 0, 0.8);
+    --window-background: rgba(28, 28, 28, 0.8);
+    --header-background: rgba(38, 38, 38, 1);
+    --tabs-background: rgba(255, 255, 255, 0.05);
+
+    --content-tabs-background: rgba(255, 255, 255, 0.02);
+
+    --footer-background: rgba(38, 38, 38, 0.8);
+}
+
+img.emoji {
+    max-height: 14px;
+}
+
+/**
+ * App - Scrollbar Styling
+**/
+.gst-wrapper *::selection {
+    background-color: #95b80690;
+    color: #fff;
+}
+
+.gst-wrapper *::-webkit-scrollbar {
+    width: 5px;
+    height: 5px;
+}
+
+.gst-wrapper *::-webkit-scrollbar-track {
+    background-color: #202020;
+}
+
+.gst-wrapper *::-webkit-scrollbar-thumb {
+    background-color: #95b80690;
+}
+
+/**
+ * App - Tag Styling
+**/
+.gst-wrapper h1, .gst-wrapper h2, .gst-wrapper h3, .gst-wrapper h4, .gst-wrapper h5, .gst-wrapper h6 {
+    margin: revert !important;
+}
+
+.float-left {
+    float: left !important;
+}
+
+.float-right {
+    float: right !important;
+}
+
+.text-primary {
+    color: #95b806;
+}
+
+.text-danger {
+    color: #ff3939;
+}
+
+.text-warning {
+    color: #ffaa69;
+}
+
+.text-success {
+    color: #99ff99;
+}
+
+.text-muted {
+    color: #777;
+}
+
+/**
+ * App - Control Styling
+*/
+.gst-wrapper input, .gst-wrapper select {
+    padding: 8px 12px !important;
+    font-size: 12px !important;
+}
+.gst-wrapper input[type="text"] {
+    transition: border-color .25s, background .25s;
+
+    background: rgba(0, 0, 0, 0.2);
+
+    border: 0;
+    border-bottom: 2px solid transparent !important;
+}
+.gst-wrapper input[type="text"]:hover {
+    color: #ccc;
+    background: rgba(0, 0, 0, 0.3);
+    border-color: #95b80690 !important;
+}
+.gst-wrapper input[type="text"]:focus {
+    color: #fff;
+    background: rgba(0, 0, 0, 0.4);
+    border-color: #95b806 !important;
+}
+
+.gst-wrapper select {
+    transition: border-color .25s, background .25s;
+
+    background: rgba(0, 0, 0, 0.2);
+
+    border: 0;
+    border-bottom: 2px solid transparent !important;
+}
+
+/**
+ * App - Buttons Styling
+*/
+.gst-wrapper .btn {
+    font-size: 14px;
+    padding: 6px 12px;
+    margin-bottom: 0;
+
+    display: inline-block;
+    text-decoration: none;
+    text-align: center;
+    white-space: nowrap;
+    vertical-align: middle;
+    -ms-touch-action: manipulation;
+    touch-action: manipulation;
+    cursor: pointer;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    background-image: none;
+    border: 1px solid transparent;
+}
+.gst-wrapper .btn.btn-xs {
+    font-size: 12px;
+    padding: 4px 10px;
+}
+.gst-wrapper .btn:hover,
+.gst-wrapper .btn:focus {
+    color: #333;
+    text-decoration: none;
+}
+
+.gst-wrapper .btn.btn-primary {
+    color: #fff;
+    background: #95b806 !important;
+    border: rgba(255, 255, 255, 0.1) !important;
+}
+.gst-wrapper .btn.btn-primary:hover {
+    color: #ccc;
+    background: #95b80690 !important;
+}
+
+.gst-wrapper .btn.btn-warning {
+    color: #fff;
+    background: #b88006 !important;
+    border: rgba(255, 255, 255, 0.1) !important;
+}
+.gst-wrapper .btn.btn-warning:hover {
+    color: #ccc;
+    background: #b8800690 !important;
+}
+
+.gst-wrapper .btn.btn-danger {
+    color: #fff;
+    background: #b83506 !important;
+    border: rgba(255, 255, 255, 0.1) !important;
+}
+.gst-wrapper .btn.btn-danger:hover {
+    color: #ccc;
+    background: #b8350690 !important;
+}
+
+/**
+ * App - General Styling
+**/
+.gst-wrapper {
+    color: #f1f1f1;
+    font-family: 'Titillium Web', sans-serif;
+
+    position: fixed;
+    left: 0;
+    top: 0;
+
+    width: 100vw;
+    height: 100vh;
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+
+    background: var(--wrapper-background);
+}
+
+.gst-wrapper:after {
+	background-image: radial-gradient(black 33%, transparent 33%);
+	background-size: 3px 3px;
+}
+
+.gst-window {
+    order: 0;
+
+    width: 50%;
+    max-width: 970px;
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+
+    background: var(--window-background)
+}
+
+/**
+ * Window - Header Styling
+**/
+.gst-window > .gst-header {
+    order: 0;
+
+    display: flex;
+    align-items: center;
+    width: 100%;
+
+    font-size: 18px;
+    background: var(--header-background);
+    padding: 0.75em;
+
+    border-top: 2px solid #95b806;
+    border-bottom: 2px solid rgba(255, 255, 255, 0.1);
+
+    box-shadow: 0px 0px 15px 0px #000;
+}
+
+.gst-header > .gst-details {
+    order: 0;
+    flex-grow: 1;
+}
+
+.gst-details > i {
+    margin-right: 0.25em;
+}
+
+.gst-header > .gst-close {
+    order: 1;
+
+    font-size: 18px;
+}
+
+/**
+ * Window - Tabs Styling
+**/
+.gst-window .gst-tabs {
+    order: 1;
+
+    display: flex;
+    align-items: center;
+
+    flex-wrap: nowrap;
+    overflow: auto;
+
+    width: 100%;
+
+    background: var(--tabs-background);
+    box-shadow: 0px 15px 15px 0px rgba(0, 0, 0, 0.5);
+}
+
+.gst-content .gst-tabs {
+    box-shadow: 0px 5px 15px 0px rgb(0 0 0 / 30%)
+}
+
+.gst-tab.end {
+    margin-left: auto;
+}
+
+.gst-tab {
+    transition: .15s;
+
+    font-size: 14px;
+    color: #ccc !important;
+    padding: 0.75em 1em;
+
+    border-bottom: 2px solid transparent;
+
+    white-space: nowrap;
+}
+
+.gst-content .gst-tab {
+    padding: 0.35em 1em !important;
+    border-bottom: 0 !important;
+}
+
+.gst-tab > i {
+    transition: .15s;
+
+    color: #cccccc90;
+    margin-right: 0.25em;
+}
+
+.gst-tab:hover {
+    border-color: #95b80690;
+}
+
+
+.gst-tab:hover > i {
+    color: #95b80690 !important;
+}
+
+.gst-tab.active {
+    background: rgba(149, 184, 6, 0.1);
+    border-color: #95b806 !important;
+}
+
+.gst-content .gst-tab.active {
+    color: #fff !important;
+    background: #95b80690;
+}
+
+.gst-tab.active > i {
+    color: #95b806 !important;
+}
+
+.gst-content .gst-tab.active > i {
+    color: #fff !important;
+}
+
+/**
+ * Window - Content Styling
+**/
+.gst-window > .gst-content {
+    order: 2;
+    flex-grow: 1;
+
+    display: flex;
+    flex-direction: column;
+
+    width: 100%;
+
+    overflow: auto;
+    min-height: calc(380 * var(--pixel-h));
+    max-height: calc(380 * var(--pixel-h));
+
+}
+
+.gst-content > .gst-tabs {
+    order: 0;
+
+    background: var(--content-tabs-background);
+}
+
+.gst-content > div:not(.gst-tabs) {
+    order: 1;
+    width: 100%;
+    height: 1%;
+}
+
+.gst-content > div:not(.gst-tabs) > div {
+    padding: 1em;
+}
+
+.gst-content > div > div > .gst-page-header {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+}
+
+.gst-page-header > h1 {
+    order: 0;
+    font-weight: 500;
+    margin-top: 0 !important;
+    margin-bottom: 0.10em !important;
+}
+
+.gst-page-header > div {
+    order: 1;
+    flex-grow: 1;
+}
+
+.gst-content > div > div > .gst-page-header + hr {
+    width: 100%;
+    float: left;
+    border-color: rgba(255, 255, 255, 0.05);
+}
+
+.gst-content > div > div > .gst-tab-page {
+    width: 100%;
+    margin-top: 2em;
+    padding-bottom: 0.75em;
+}
+
+.gst-content > div > div > .gst-tab-page > div > div {
+    background: rgba(255, 255, 255, 0.05);
+    padding: 0.5em 1em 1em 1em;
+    margin-bottom: 1em;
+}
+
+/**
+ * Window - Footer Styling
+**/
+.gst-window > .gst-footer {
+    order: 3;
+
+    display: flex;
+    align-items: center;
+    width: 100%;
+
+    font-size: 14px;
+    background: var(--footer-background);
+
+    padding: 1em;
+
+    box-shadow: 0px 0px 15px 0px #000;
+}
+
+/**
+ * Tab - Feed Styling
+**/
+.gst-page-feed > div > h3 {
+    margin: 0 !important;
+    font-size: 16px;
+}
+.gst-page-feed > div > h3 > small {
+    float: right;
+    font-weight: 600;
+}
+
+.gst-page-feed > div > p, .gst-page-feed > div > li {
+    color: #bbb;
+    font-size: 14px;
+}
+
+/**
+ * Tab - Themes Styling
+**/
+.gst-tab-page h3 {
+    margin: 0 !important;
+    font-size: 18px;
+}
+.gst-add-item {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    padding: 1em !important;
+}
+.gst-add-item > span.gst-item-input {
+    order: 0;
+    flex-grow: 1;
+
+    padding-right: 8px !important;
+}
+.gst-add-item > span.gst-item-button {
+    order: 1;
+}
+
+
+.gst-item {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+}
+
+.gst-item-details {
+    order: 0;
+    flex-grow: 1;
+
+    display: flex;
+    flex-direction: column;
+}
+.gst-item-details > .gst-item-name {
+    order: 0;
+}
+.gst-item-details > .gst-item-link {
+    order: 1;
+
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    max-width: calc(400 * var(--pixel-w));
+}
+
+.gst-item-actions {
+    order: 1;
+}
+
+/**
+ * Tab - Scripts Styling
+**/
+.gst-page-scripts > .gst-script-setting {
+    display: flex;
+    align-items: center;
+
+    padding: 1em !important;
+}
+
+.gst-script-setting > .gst-setting-details {
+    order: 0;
+
+    display: flex;
+    flex-direction: column;
+}
+.gst-setting-details > .gst-setting-name {
+    order: 0;
+    font-size: 14px;
+}
+.gst-setting-details > .gst-setting-description {
+    order: 1;
+
+    color: #888;
+    font-size: 12px;
+}
+
+
+.gst-script-setting > .gst-setting-element {
+    order: 1;
+    flex-grow: 1;
+}
+.gst-script-setting > .gst-setting-element > * {
+    float: right !important;
+}
+.gst-script-setting > .gst-setting-element > input[type="text"] {
+    width: 75%;
+}
+.gst-script-setting > .gst-setting-element > select {
+    width: 30%;
+    max-height: 40px;
+}

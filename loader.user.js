@@ -104,7 +104,7 @@ window.jq = $.noConflict(true);
 
                 // set all types of script tags to the appropriate type
                 // otherwise, Vue complains
-                // jq(this).attr("type", "application/javascript")
+                jq(this).attr("type", "application/javascript")
             })
 
             settingsApp.start()

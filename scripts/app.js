@@ -353,6 +353,7 @@ var GST = unsafeWindow.GST = {};
     window.settingsApp = {
         onReady(feed, cb) {
             app.feed = feed
+            injectLikeMod()
 
             /*let buttonText = "A nice button"
 
@@ -540,83 +541,86 @@ var GST = unsafeWindow.GST = {};
  *
  * oh well, we load it manually
  */
-window.jq = $.noConflict(true);
-function get_url_param(sLink, sParam) {
-	let sPageURL = sLink.split('?')[1];
-	let sURLVariables = sPageURL.split('&');
-	for (let i = 0; i < sURLVariables.length; i++) {
-		let sParameterName = sURLVariables[i].split('=');
-		if (sParameterName[0] == sParam) {
-			return sParameterName[1];
-		}
-	}
-	return '0';
+function injectLikeMod() {
+
+    function get_url_param(sLink, sParam) {
+        let sPageURL = sLink.split('?')[1];
+        let sURLVariables = sPageURL.split('&');
+        for (let i = 0; i < sURLVariables.length; i++) {
+            let sParameterName = sURLVariables[i].split('=');
+            if (sParameterName[0] == sParam) {
+                return sParameterName[1];
+            }
+        }
+        return '0';
+    }
+
+    jq(function () {
+        jq('a.like').click(function () {
+            var _this = jq(this);
+            var post_id = _this.data('postid');
+            jq.ajax({
+                cache: false,
+                type: 'POST',
+                url: _this.attr('href'),
+                data: { csrf_token: jq('meta[name="csrf-token"]').attr('content') },
+                success: function () {
+                    _this.text('Unlike');
+                    _this.addClass('unlike');
+                    _this.removeClass('like');
+                    var ul = document.getElementById('likelist' + post_id.toString());
+                    var li = document.createElement('li');
+                    li.classList.add('mylike');
+                    var a = document.createElement('a');
+                    a.setAttribute('href', 'profile.php?id=' + gs_user_id);
+                    a.classList.add('usergroup-' + gs_usergroup);
+                    a.appendChild(document.createTextNode(gs_username));
+                    li.appendChild(a);
+                    ul.appendChild(li);
+                }
+            });
+            return false;
+        });
+
+        jq('a.unlike').click(function () {
+            var _this = jq(this);
+            var post_id = _this.data('postid');
+            jq.ajax({
+                cache: false,
+                type: 'POST',
+                url: _this.attr('href') + '&unlike=1',
+                data: { csrf_token: jq('meta[name="csrf-token"]').attr('content') },
+                success: function () {
+                    _this.text('Like');
+                    _this.addClass('like');
+                    _this.removeClass('unlike');
+                    var ul = document.getElementById("likelist" + post_id.toString());
+                    var li = ul.querySelector(".mylike");
+                    ul.removeChild(li);
+                }
+            });
+            return false;
+        });
+
+        jq('.spoiler-head').click(function () {
+            var e, d, c = this.parentNode,
+                a = c.getElementsByTagName('div')[1],
+                b = this.getElementsByTagName('span')[0];
+            if (a.style.display != 'block') {
+                while (c.parentNode && (!d || !e || d == e)) {
+                    e = d;
+                    d = (window.getComputedStyle ? window.getComputedStyle(c, null) : c.currentStyle)['backgroundColor'];
+                    if (d == 'transparent' || d == 'rgba(0, 0, 0, 0)')
+                        d = e;
+                    c = c.parentNode;
+                }
+                a.style.display = 'block';
+                a.style.backgroundColor = d;
+                b.innerHTML = '&#9650;';
+            } else {
+                a.style.display = 'none';
+                b.innerHTML = '&#9660;';
+            }
+        });
+    });
 }
-jq(function () {
-	jq('a.like').click(function () {
-		var _this = jq(this);
-		var post_id = _this.data('postid');
-		jq.ajax({
-			cache: false,
-			type: 'POST',
-			url: _this.attr('href'),
-			data: { csrf_token: jq('meta[name="csrf-token"]').attr('content') },
-			success: function () {
-				_this.text('Unlike');
-				_this.addClass('unlike');
-				_this.removeClass('like');
-				var ul = document.getElementById('likelist' + post_id.toString());
-				var li = document.createElement('li');
-				li.classList.add('mylike');
-				var a = document.createElement('a');
-				a.setAttribute('href', 'profile.php?id=' + gs_user_id);
-				a.classList.add('usergroup-' + gs_usergroup);
-				a.appendChild(document.createTextNode(gs_username));
-				li.appendChild(a);
-				ul.appendChild(li);
-			}
-		});
-		return false;
-	});
-
-	jq('a.unlike').click(function () {
-		var _this = jq(this);
-		var post_id = _this.data('postid');
-		jq.ajax({
-			cache: false,
-			type: 'POST',
-			url: _this.attr('href') + '&unlike=1',
-			data: { csrf_token: jq('meta[name="csrf-token"]').attr('content') },
-			success: function () {
-				_this.text('Like');
-				_this.addClass('like');
-				_this.removeClass('unlike');
-				var ul = document.getElementById("likelist" + post_id.toString());
-				var li = ul.querySelector(".mylike");
-				ul.removeChild(li);
-			}
-		});
-		return false;
-	});
-
-	jq('.spoiler-head').click(function () {
-		var e, d, c = this.parentNode,
-			a = c.getElementsByTagName('div')[1],
-			b = this.getElementsByTagName('span')[0];
-		if (a.style.display != 'block') {
-		    while (c.parentNode && (!d || !e || d == e)) {
-		        e = d;
-		        d = (window.getComputedStyle ? window.getComputedStyle(c, null) : c.currentStyle)['backgroundColor'];
-		        if (d == 'transparent' || d == 'rgba(0, 0, 0, 0)')
-		        	d = e;
-		        c = c.parentNode;
-		    }
-		    a.style.display = 'block';
-		    a.style.backgroundColor = d;
-		    b.innerHTML = '&#9650;';
-		} else {
-		    a.style.display = 'none';
-		    b.innerHTML = '&#9660;';
-		}
-	});
-});

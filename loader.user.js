@@ -2,7 +2,7 @@
 // @name                    Custom Gamesense Themes
 // @namespace               https://gamesense.pub/forums/*
 // @author                  Nexxed & AnonVodka
-// @version                 2.0.3-beta
+// @version                 2.0.4-beta
 
 // @supportURL              https://github.com/Gamesensed/Gamesense-Themes
 // @updateURL               https://gsext.nex.wtf/loader.user.js

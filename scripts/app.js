@@ -543,22 +543,10 @@ var GST = unsafeWindow.GST = {};
  */
 function injectLikeMod() {
 
-    function get_url_param(sLink, sParam) {
-        let sPageURL = sLink.split('?')[1];
-        let sURLVariables = sPageURL.split('&');
-        for (let i = 0; i < sURLVariables.length; i++) {
-            let sParameterName = sURLVariables[i].split('=');
-            if (sParameterName[0] == sParam) {
-                return sParameterName[1];
-            }
-        }
-        return '0';
-    }
-
     jq(function () {
         jq('a.like').click(function () {
-            var _this = jq(this);
-            var post_id = _this.data('postid');
+            const _this = jq(this);
+            const postId = _this.data('postid');
             jq.ajax({
                 cache: false,
                 type: 'POST',
@@ -568,10 +556,10 @@ function injectLikeMod() {
                     _this.text('Unlike');
                     _this.addClass('unlike');
                     _this.removeClass('like');
-                    var ul = document.getElementById('likelist' + post_id.toString());
-                    var li = document.createElement('li');
+                    const ul = document.getElementById('likelist' + postId.toString());
+                    const li = document.createElement('li');
                     li.classList.add('mylike');
-                    var a = document.createElement('a');
+                    const a = document.createElement('a');
                     a.setAttribute('href', 'profile.php?id=' + gs_user_id);
                     a.classList.add('usergroup-' + gs_usergroup);
                     a.appendChild(document.createTextNode(gs_username));
@@ -583,8 +571,8 @@ function injectLikeMod() {
         });
 
         jq('a.unlike').click(function () {
-            var _this = jq(this);
-            var post_id = _this.data('postid');
+            const _this = jq(this);
+            const postId = _this.data('postid');
             jq.ajax({
                 cache: false,
                 type: 'POST',
@@ -594,8 +582,8 @@ function injectLikeMod() {
                     _this.text('Like');
                     _this.addClass('like');
                     _this.removeClass('unlike');
-                    var ul = document.getElementById("likelist" + post_id.toString());
-                    var li = ul.querySelector(".mylike");
+                    const ul = document.getElementById('likelist' + postId.toString());
+                    const li = ul.querySelector(".mylike");
                     ul.removeChild(li);
                 }
             });
@@ -603,23 +591,34 @@ function injectLikeMod() {
         });
 
         jq('.spoiler-head').click(function () {
-            var e, d, c = this.parentNode,
-                a = c.getElementsByTagName('div')[1],
-                b = this.getElementsByTagName('span')[0];
-            if (a.style.display != 'block') {
-                while (c.parentNode && (!d || !e || d == e)) {
-                    e = d;
-                    d = (window.getComputedStyle ? window.getComputedStyle(c, null) : c.currentStyle)['backgroundColor'];
-                    if (d == 'transparent' || d == 'rgba(0, 0, 0, 0)')
-                        d = e;
-                    c = c.parentNode;
+            // Define the parent element and the div and span children
+            const parentElement = this.parentNode;
+            const divElement = parentElement.getElementsByTagName('div')[1];
+            const spanElement = this.getElementsByTagName('span')[0];
+
+            // Initialize variables for the background color
+            let previousColor, currentColor, currentElement = parentElement;
+
+            // If the div is not displayed
+            if (divElement.style.display !== 'block') {
+                // Find the first parent with a defined background color
+                while (currentElement.parentNode && (!currentColor || !previousColor || currentColor === previousColor)) {
+                    previousColor = currentColor;
+                    currentColor = (window.getComputedStyle ? window.getComputedStyle(currentElement, null) : currentElement.currentStyle)['backgroundColor'];
+                    if (currentColor === 'transparent' || currentColor === 'rgba(0, 0, 0, 0)') {
+                        currentColor = previousColor;
+                    }
+                    currentElement = currentElement.parentNode;
                 }
-                a.style.display = 'block';
-                a.style.backgroundColor = d;
-                b.innerHTML = '&#9650;';
+                // Display the div and set its background color
+                divElement.style.display = 'block';
+                divElement.style.backgroundColor = currentColor;
+                // Change the span content
+                spanElement.innerHTML = '&#9650;';
             } else {
-                a.style.display = 'none';
-                b.innerHTML = '&#9660;';
+                // Hide the div and change the span content
+                divElement.style.display = 'none';
+                spanElement.innerHTML = '&#9660;';
             }
         });
     });

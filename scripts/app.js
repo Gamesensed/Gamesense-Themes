@@ -552,15 +552,15 @@ function get_url_param(sLink, sParam) {
 	}
 	return '0';
 }
-$(function () {
-	$('a.like').click(function () {
-		var _this = $(this);
+jq(function () {
+	jq('a.like').click(function () {
+		var _this = jq(this);
 		var post_id = _this.data('postid');
-		$.ajax({
+		jq.ajax({
 			cache: false,
 			type: 'POST',
 			url: _this.attr('href'),
-			data: { csrf_token: $('meta[name="csrf-token"]').attr('content') },
+			data: { csrf_token: jq('meta[name="csrf-token"]').attr('content') },
 			success: function () {
 				_this.text('Unlike');
 				_this.addClass('unlike');
@@ -579,14 +579,14 @@ $(function () {
 		return false;
 	});
 
-	$('a.unlike').click(function () {
-		var _this = $(this);
+	jq('a.unlike').click(function () {
+		var _this = jq(this);
 		var post_id = _this.data('postid');
-		$.ajax({
+		jq.ajax({
 			cache: false,
 			type: 'POST',
 			url: _this.attr('href') + '&unlike=1',
-			data: { csrf_token: $('meta[name="csrf-token"]').attr('content') },
+			data: { csrf_token: jq('meta[name="csrf-token"]').attr('content') },
 			success: function () {
 				_this.text('Like');
 				_this.addClass('like');
@@ -599,7 +599,7 @@ $(function () {
 		return false;
 	});
 
-	$('.spoiler-head').click(function () {
+	jq('.spoiler-head').click(function () {
 		var e, d, c = this.parentNode,
 			a = c.getElementsByTagName('div')[1],
 			b = this.getElementsByTagName('span')[0];

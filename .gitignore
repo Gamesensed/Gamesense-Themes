@@ -1,0 +1,4 @@
+_certs
+.vscode
+node_modules
+pnpm-lock.yaml

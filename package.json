@@ -1,0 +1,11 @@
+{
+	"scripts": {
+		"build": "npx tailwindcss -i ./styles/window.css -o ./styles/window.dist.css",
+		"watch": "npx tailwindcss -i ./styles/window.css -o ./styles/window.dist.css --watch"
+	},
+	"devDependencies": {
+		"eslint": "^8.57.0",
+		"eslint-plugin-vue": "^9.22.0",
+		"tailwindcss": "^3.4.1"
+	}
+}

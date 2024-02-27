@@ -94,7 +94,7 @@ function updateMembers() {
                         let uid = parseInt(matches[1])
 
                         // if it's a valid UID
-                        if(!!uid) {
+                        if(uid) {
 
                             // add the online/offline class to the postavatar element
                             postavatar.addClass(online.members.findIndex(id => id === uid) > -1 ? "online" : "offline")

@@ -1,12 +1,12 @@
 <div class="gst-wrapper" id="settingsWindow" v-if="open">
-    <div class="gst-window">
+    <div class="gst-window tw-w-full sm:tw-max-w-screen-sm md:tw-max-w-screen-lg tw-backdrop-blur-sm">
 
         <div class="gst-header">
             <span class="gst-details">
                 <i class="fas fa-cogs"></i>
-                Custom GameSense Settings
+                GameSense Forum Settings
             </span>
-            <span class="gst-close">
+            <span class="tw-text-white/50 hover:tw-text-white tw-transition-colors tw-cursor-pointer">
                 <i class="fas fa-times" @click="toggleWindow(false)"></i>
             </span>
         </div>
@@ -47,9 +47,9 @@
             <div>
                 <div>
                     <div class="gst-page-header">
-                        <h1 v-if="activePage !== 'scripts'">{{ getPageName }}</h1>
-                        <h1 v-else-if="activeScriptPage === 'manager'">Script Manager</h1>
-                        <h1 v-else>{{ activeScriptPage.name }}</h1>
+                        <h1 v-if="activePage !== 'scripts'" class="tw-text-2xl">{{ getPageName }}</h1>
+                        <h1 v-else-if="activeScriptPage === 'manager'" class="tw-text-2xl">Script Manager</h1>
+                        <h1 v-else class="tw-text-2xl">{{ activeScriptPage.name }}</h1>
 
                         <div class="gst-page-actions" v-if="activePage === 'scripts' && activeScriptPage !== 'manager'">
                             <a class="btn btn-xs btn-warning float-right" href="javascript:void(0)" @click="unloadScript(activeScriptPage.key)">
@@ -61,27 +61,32 @@
 
                     <div class="gst-tab-page">
 
-                        <div v-if="activePage === 'home'" class="gst-page-feed">
-                            <div v-for="(post, index) in feed" :key="`feed-post-${index}`">
-                                <h3>
-                                    {{ post.title }}
-                                    <small class="text-muted">
-                                        <span v-if="post.author"><strong class="text-primary">{{ post.author }}</strong> |</span>
-                                        {{ getTimeFromNow(post.time) }}
-                                    </small>
-                                </h3>
+                        <div v-if="activePage === 'home'" class="tw-flex tw-flex-col tw-space-y-4">
+                            <post v-for="(post, index) in feed" :key="`feed-post-${index}`" class="tw-bg-black/30 tw-rounded-lg tw-border tw-border-white/10">
+                                <div class="tw-bg-black/50 tw-flex tw-items-center tw-justify-between tw-px-4 tw-py-2 tw-rounded-t-lg">
+                                    <div class="tw-flex tw-flex-col">
+                                        <span class="tw-font-bold">{{ post.title }}</span>
+                                        <span class="text-muted tw-text-xs">{{ getTimeFromNow(post.time) }}</span>
+                                    </div>
+                                    <div class="text-muted tw-flex tw-flex-col tw-justify-center tw-items-end tw-text-xs">
+                                        <span v-if="post.author">Published by</span>
+                                        <span v-if="post.author"><strong class="text-primary tw-text-sm">{{ post.author }}</strong></span>
+                                    </div>
+                                </div>
 
-                                <p v-if="post.content instanceof String">{{ post.content }}</p>
+                                <p v-if="post.content instanceof String" class="tw-p-4">{{ post.content }}</p>
 
-                                <li v-else-if="post.content instanceof Array" v-for="content in post.content">
-                                    {{ content }}
-                                </li>
-                            </div>
+                                <div v-else-if="post.content instanceof Array" class="tw-flex tw-flex-col tw-space-y-2 tw-p-4 tw-text-sm">
+                                    <li v-for="content in post.content">
+                                        {{ content }}
+                                    </li>
+                                </div>
+                            </post>
                         </div>
 
                         <div v-else-if="activePage === 'themes'" class="gst-page-themes">
-                            <div class="gst-add-item">
-                                <span class="gst-item-input">
+                            <div class="tw-bg-black/5 tw-flex tw-items-center tw-w-full tw-mb-8">
+                                <span class="gst-item-input tw-flex-grow">
                                     <input type="text" maxlength="140" placeholder="Enter a URL..." style="width: 98%" v-model="inputTheme">
                                 </span>
 
@@ -92,34 +97,35 @@
                                 </span>
                             </div>
 
+                            <div class="tw-flex tw-flex-col tw-divide-y tw-divide-white/10 tw-border tw-border-white/10">
+                                <div v-for="theme in sortedSavedThemes" class="tw-flex tw-justify-between tw-items-center tw-bg-black/25 tw-p-2">
+                                    <div class="gst-item-details">
+                                        <span class="gst-item-name">
+                                            <h3>{{ theme.name }}</h3>
+                                        </span>
+                                        <span class="gst-item-link text-muted">
+                                            {{ theme.link }}
+                                        </span>
+                                    </div>
 
-                            <div v-for="theme in sortedSavedThemes" class="gst-item">
-                                <div class="gst-item-details">
-                                    <span class="gst-item-name">
-                                        <h3>{{ theme.name }}</h3>
-                                    </span>
-                                    <span class="gst-item-link text-muted">
-                                        {{ theme.link }}
-                                    </span>
-                                </div>
-
-                                <div class="gst-item-actions">
-                                    <a v-if="!isThemeActive(theme.link)" class="btn btn-primary" href="javascript:void(0)" @click="addActiveTheme(theme.link)">
-                                        Load
-                                    </a>
-                                    <a v-else class="btn btn-warning" href="javascript:void(0)" @click="removeActiveTheme(theme.link)">
-                                        Unload
-                                    </a>
-                                    <a class="btn btn-danger" href="javascript:void(0)" @click="deleteSavedTheme(theme.link)">
-                                        Delete
-                                    </a>
+                                    <div class="gst-item-actions">
+                                        <a v-if="!isThemeActive(theme.link)" class="btn btn-primary" href="javascript:void(0)" @click="addActiveTheme(theme.link)">
+                                            Load
+                                        </a>
+                                        <a v-else class="btn btn-warning" href="javascript:void(0)" @click="removeActiveTheme(theme.link)">
+                                            Unload
+                                        </a>
+                                        <a class="btn btn-danger" href="javascript:void(0)" @click="deleteSavedTheme(theme.link)">
+                                            Delete
+                                        </a>
+                                    </div>
                                 </div>
                             </div>
                         </div>
 
                         <div v-else-if="activePage === 'scripts' && activeScriptPage === 'manager'" class="gst-page-scripts">
-                            <div class="gst-add-item">
-                                <span class="gst-item-input">
+                            <div class="tw-bg-black/5 tw-flex tw-items-center tw-w-full tw-mb-8">
+                                <span class="gst-item-input tw-flex-grow">
                                     <input type="text" maxlength="140" placeholder="Enter a URL..." style="width: 98%" v-model="inputScript">
                                 </span>
 
@@ -130,48 +136,49 @@
                                 </span>
                             </div>
 
-                            <div v-for="script in sortedSavedScripts" class="gst-item">
-                                <div class="gst-item-details">
-                                    <span class="gst-item-name">
-                                        <h3>
-                                            {{ script.name }}
-                                            <small v-if="script.version" class="text-muted">{{ script.version }}</small>
-                                            <small v-if="script.author" class="text-muted">by <strong>{{ script.author }}</strong></small>
-                                        </h3>
-                                    </span>
-                                    <span class="gst-item-link text-muted">
-                                        {{ script.link }}
-                                    </span>
-                                </div>
+                            <div class="tw-flex tw-flex-col tw-divide-y tw-divide-white/10 tw-border tw-border-white/10">
+                                <div v-for="script in sortedSavedScripts" class="tw-flex tw-justify-between tw-items-center tw-bg-black/25 tw-p-2">
+                                    <div class="tw-flex tw-flex-col">
+                                        <span class="gst-item-name">
+                                            <h3>
+                                                {{ script.name }}
+                                                <small v-if="script.version" class="text-muted">{{ script.version }}</small>
+                                                <small v-if="script.author" class="text-muted">by <strong>{{ script.author }}</strong></small>
+                                            </h3>
+                                        </span>
+                                        <span class="gst-item-link text-muted tw-text-sm">
+                                            {{ script.link }}
+                                        </span>
+                                    </div>
 
-                                <div class="gst-item-actions">
-                                    <a v-if="!isScriptActive(script.link)" class="btn btn-primary" href="javascript:void(0)" @click="addActiveScript(script.link)">
-                                        Load
-                                    </a>
-                                    <a v-else class="btn btn-warning" href="javascript:void(0)" @click="removeActiveScript(script.link)">
-                                        Unload
-                                    </a>
-                                    <a class="btn btn-danger" href="javascript:void(0)" @click="deleteSavedScript(script.link)">
-                                        Delete
-                                    </a>
+                                    <div class="gst-item-actions">
+                                        <a v-if="!isScriptActive(script.link)" class="btn btn-primary" href="javascript:void(0)" @click="addActiveScript(script.link)">
+                                            Load
+                                        </a>
+                                        <a v-else class="btn btn-warning" href="javascript:void(0)" @click="removeActiveScript(script.link)">
+                                            Unload
+                                        </a>
+                                        <a class="btn btn-danger" href="javascript:void(0)" @click="deleteSavedScript(script.link)">
+                                            Delete
+                                        </a>
+                                    </div>
                                 </div>
                             </div>
                         </div>
 
-                        <div v-else-if="activePage === 'scripts'" class="gst-page-scripts">
-
+                        <div v-else-if="activePage === 'scripts'" class="tw-grid tw-grid-cols-1 sm:tw-grid-cols-2 tw-gap-4">
                             <!-- Render intermediate UI for the selected script page -->
-                            <div class="gst-script-setting" v-for="setting in activeScriptPage.settings">
-                                <span class="gst-setting-details">
+                            <div class="tw-flex tw-justify-between tw-items-center tw-bg-black/25 tw-p-2 tw-border tw-border-white/10" v-for="setting in activeScriptPage.settings">
+                                <div class="tw-flex tw-flex-col">
                                     <span class="gst-setting-name">
                                         {{ setting.name }}
                                     </span>
-                                    <span v-if="setting.description" class="gst-setting-description">
+                                    <span v-if="setting.description" class="text-muted tw-text-xs">
                                         {{ setting.description }}
                                     </span>
-                                </span>
+                                </div>
 
-                                <span class="gst-setting-element">
+                                <div class="gst-setting-element">
 
                                     <!-- Regular button -->
                                     <a v-if="setting.type.toLowerCase() === 'button'" class="btn btn-primary" href="javascript:void(0)"
@@ -185,12 +192,14 @@
 
                                     <!-- Regular select -->
                                     <select v-if="setting.type.toLowerCase() === 'select'" v-model="setting.multiple ? setting.values : setting.value" :multiple="setting.multiple || false"
-                                        @change="setting.onChange ? setting.onChange(setting.value) : unhandledEvent(setting)">
-                                        <option v-for="(opt, index) in setting.options" :value="index">
+                                        @change="setting.onChange ? setting.onChange(setting.value) : unhandledEvent(setting)"
+                                        class="!tw-bg-black/50"
+                                    >
+                                        <option v-for="(opt, index) in setting.options" :value="index" class="tw-bg-black/75 tw-text-white">
                                             {{ opt }}
                                         </option>
                                     </select>
-                                </span>
+                                </div>
 
                             </div>
                         </div>

@@ -8,28 +8,34 @@ var GST = unsafeWindow.GST = {};
     let app = new Vue({
 
         // this is the data that can be accessed from within the app's scope
-        data: {
-            open: false,
+        data() {
+            const obj = {
+                open: false,
 
-            // init data
-            feed: [],
+                // init data
+                feed: [],
 
-            // pages
-            activePage: "home",
-            activeScriptPage: "manager",
+                // pages
+                activePage: "home",
+                activeScriptPage: "manager",
 
-            // themes
-            activeThemes: GM_getValue("activeThemes") ? JSON.parse(GM_getValue("activeThemes")) : [],
-            savedThemes: GM_getValue("savedThemes") ? JSON.parse(GM_getValue("savedThemes")) : [],
+                // themes
+                activeThemes: GM_getValue("activeThemes") ? JSON.parse(GM_getValue("activeThemes")) : [],
+                savedThemes: GM_getValue("savedThemes") ? JSON.parse(GM_getValue("savedThemes")) : [],
 
-            // scripts
-            activeScripts: GM_getValue("activeScripts") ? JSON.parse(GM_getValue("activeScripts")) : [],
-            savedScripts: GM_getValue("savedScripts") ? JSON.parse(GM_getValue("savedScripts")) : [],
-            loadedScripts: [],
+                // scripts
+                activeScripts: GM_getValue("activeScripts") ? JSON.parse(GM_getValue("activeScripts")) : [],
+                savedScripts: GM_getValue("savedScripts") ? JSON.parse(GM_getValue("savedScripts")) : [],
+                loadedScripts: [],
 
-            // inputs
-            inputTheme: "",
-            inputScript: ""
+                // inputs
+                inputTheme: "",
+                inputScript: ""
+            }
+
+            log("UI", "Initialized successfully", obj)
+
+            return obj
         },
 
         // when the app is mounted to an element ("#punindex" in this case) this function is called
@@ -45,11 +51,11 @@ var GST = unsafeWindow.GST = {};
 
             // used for converting unfriendly page names (e.g "settings") to friendly page names (e.g "Settings")
             getPageName() {
-                return this.activePage.charAt(0).toUpperCase() + this.activePage.slice(1);
+                return this.activePage.charAt(0).toUpperCase() + this.activePage.slice(1)
             },
 
             getScriptPageName() {
-                return this.activeScriptPage.charAt(0).toUpperCase() + this.activeScriptPage.slice(1);
+                return this.activeScriptPage.charAt(0).toUpperCase() + this.activeScriptPage.slice(1)
             },
 
             // used for returning a sorted theme list in the themes page
@@ -350,10 +356,12 @@ var GST = unsafeWindow.GST = {};
         }
     })
 
+    unsafeWindow.app = app
+    console.log("set app", unsafeWindow.app, window.app)
+
     window.settingsApp = {
         onReady(feed, cb) {
             app.feed = feed
-            injectLikeMod()
 
             /*let buttonText = "A nice button"
 
@@ -420,8 +428,10 @@ var GST = unsafeWindow.GST = {};
             jq(document).ready(cb)
         },
         start() {
-            jq(jq(jq(".pun #brdwelcome ul.conl li").last()).children()[0]).append(` • <a href="javascript:void(0)" id="gst-button" @click='toggleWindow(true)'>Custom forum settings</a>`)
-            Vue.nextTick(() => app.$mount("body > div"))
+            jq(jq(jq(".pun #brdwelcome ul.conl li").last()).children()[0]).append(" • <a href=\"javascript:void(0)\" id=\"gst-button\" onclick='app.toggleWindow(true)'>Custom forum settings</a>")
+
+            console.log(jq("body > div").length, jq("body > div").last())
+            Vue.nextTick(() => app.$mount("#settingsWindow"))
         }
     }
 
@@ -532,94 +542,3 @@ var GST = unsafeWindow.GST = {};
         link: "https://gsext.nex.wtf/scripts/ext/online-api.js"
     })
 })(window)
-
-
-
-/**
- * this shit should get loaded by the forum but for some reason doesn't actually load
- * maybe something to do with script type replacement
- *
- * oh well, we load it manually
- */
-function injectLikeMod() {
-
-    jq(function () {
-        jq('a.like').click(function () {
-            const _this = jq(this);
-            const postId = _this.data('postid');
-            jq.ajax({
-                cache: false,
-                type: 'POST',
-                url: _this.attr('href'),
-                data: { csrf_token: jq('meta[name="csrf-token"]').attr('content') },
-                success: function () {
-                    _this.text('Unlike');
-                    _this.addClass('unlike');
-                    _this.removeClass('like');
-                    const ul = document.getElementById('likelist' + postId.toString());
-                    const li = document.createElement('li');
-                    li.classList.add('mylike');
-                    const a = document.createElement('a');
-                    a.setAttribute('href', 'profile.php?id=' + gs_user_id);
-                    a.classList.add('usergroup-' + gs_usergroup);
-                    a.appendChild(document.createTextNode(gs_username));
-                    li.appendChild(a);
-                    ul.appendChild(li);
-                }
-            });
-            return false;
-        });
-
-        jq('a.unlike').click(function () {
-            const _this = jq(this);
-            const postId = _this.data('postid');
-            jq.ajax({
-                cache: false,
-                type: 'POST',
-                url: _this.attr('href') + '&unlike=1',
-                data: { csrf_token: jq('meta[name="csrf-token"]').attr('content') },
-                success: function () {
-                    _this.text('Like');
-                    _this.addClass('like');
-                    _this.removeClass('unlike');
-                    const ul = document.getElementById('likelist' + postId.toString());
-                    const li = ul.querySelector(".mylike");
-                    ul.removeChild(li);
-                }
-            });
-            return false;
-        });
-
-        jq('.spoiler-head').click(function () {
-            // Define the parent element and the div and span children
-            const parentElement = this.parentNode;
-            const divElement = parentElement.getElementsByTagName('div')[1];
-            const spanElement = this.getElementsByTagName('span')[0];
-
-            // Initialize variables for the background color
-            let previousColor, currentColor, currentElement = parentElement;
-
-            // If the div is not displayed
-            if (divElement.style.display !== 'block') {
-                // Find the first parent with a defined background color
-                while (currentElement.parentNode && (!currentColor || !previousColor || currentColor === previousColor)) {
-                    previousColor = currentColor;
-                    currentColor = (window.getComputedStyle ? window.getComputedStyle(currentElement, null) : currentElement.currentStyle)['backgroundColor'];
-                    if (currentColor === 'transparent' || currentColor === 'rgba(0, 0, 0, 0)') {
-                        currentColor = previousColor;
-                    }
-                    currentElement = currentElement.parentNode;
-                }
-                // Display the div and set its background color
-                divElement.style.display = 'block';
-                divElement.style.backgroundColor = currentColor;
-                // Change the span content
-                spanElement.innerHTML = '&#9650;';
-            } else {
-                // Hide the div and change the span content
-                divElement.style.display = 'none';
-                spanElement.innerHTML = '&#9660;';
-            }
-        });
-    });
-}

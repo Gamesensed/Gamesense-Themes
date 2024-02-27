@@ -1,7 +1,22 @@
 [
     {
         "author": "Nexxed",
-        "title": "Update v2.0.1-beta",
+        "title": "Update v2.0.8-beta",
+
+        "content": [
+            "Added TailwindCSS support to the forums for theming",
+            "Fixed multiple issues that were caused by Vue being mounted to the DOM improperly",
+            "Fixed an issue that caused an error when trying to like or unlike a post",
+            "Fixed spoilers being broken in posts",
+            "Removed custom shoutbox emojis due to conflicts",
+            "Updated various elements of the UI for a more modern look and feel"
+        ],
+
+        "time": "2024-02-27T15:00:00+0000"
+    },
+    {
+        "author": "Nexxed",
+        "title": "Update v2.0.0-beta",
 
         "content": [
             "Added new emojis to the shoutbox that directly replace the existing ones (new emoji picker coming soon, maybe)",

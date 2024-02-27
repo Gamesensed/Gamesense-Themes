@@ -540,7 +540,7 @@ var GST = unsafeWindow.GST = {};
  *
  * oh well, we load it manually
  */
-
+window.jq = $.noConflict(true);
 function get_url_param(sLink, sParam) {
 	let sPageURL = sLink.split('?')[1];
 	let sURLVariables = sPageURL.split('&');

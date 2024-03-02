@@ -432,6 +432,10 @@ dl#grouplegend {
     border-bottom: 2px solid #ff6900 !important;
 }
 
+#brdmenu > ul > li#navpmsnew > a > img {
+    display: inline
+}
+
 /* Shoutbox */
 #shout > form > label {
     display: flex;

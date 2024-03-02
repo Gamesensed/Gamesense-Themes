@@ -178,6 +178,9 @@ dl#grouplegend {
 
 .blockpost:not(.liker) .postbody .postleft {
     order: 0;
+
+    display: flex;
+    justify-content: center;
     flex-grow: 1;
 
     width: unset !important;
@@ -363,8 +366,8 @@ dl#grouplegend {
 
 .postavatar > img {
     border-radius: 100%;
-    min-width: 120px;
-    min-height: 120px;
+    width: 100px;
+    height: 100px;
 }
 
 .postavatar.offline > img {

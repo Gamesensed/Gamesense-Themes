@@ -143,7 +143,9 @@ dl#grouplegend {
 
 /* Custom Layouts */
 .pun {
+    transition: 250ms;
     max-width: 1200px;
+    width: 100%;
 }
 
 .pun .blockpost h2 span.conr {

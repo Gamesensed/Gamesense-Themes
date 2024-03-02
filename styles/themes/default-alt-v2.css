@@ -497,6 +497,24 @@ dl#grouplegend {
 }
 
 /* Notifications */
+.badge-unread::after {
+    top: -0.25rem;
+    right: -0.25rem;
+    height: fit-content;
+    width: fit-content;
+    padding: 2px 4px;
+    font-size: 0.5rem;
+    font-weight: 700;
+    font-family: inherit;
+    border-radius: 1.25rem;
+    border: 1px solid #95b806;
+    background: #95b8064A;
+    text-shadow: none !important;
+    letter-spacing: 0.05rem;
+    backdrop-filter: blur(10px);
+    color: #fffc;
+}
+
 #notifications-container {
     padding: 0;
     background: #303030;

@@ -357,7 +357,7 @@ dl#grouplegend {
 
 .postavatar {
     margin-bottom: 1em !important;
-    display: flex;
+    display: flex !important;
     justify-content: center;
 }
 

@@ -149,7 +149,7 @@ dl#grouplegend {
 
 /* Custom Layouts */
 .pun {
-    transition: 250ms;
+    transition: 750ms ease-in-out;
     max-width: 1200px;
     width: 100%;
 }
@@ -538,4 +538,22 @@ dl#grouplegend {
 
 .new-notification {
     background: rgba(255, 255, 255, 0.05);
+}
+
+/* CF styling */
+#cf-wrapper {
+    color: #aaa !important;
+}
+
+#cf-wrapper .text-black-dark {
+    color: white;
+}
+
+#cf-wrapper .cf-button {
+    color: #95b806;
+    border-color: #95b806aa;
+}
+
+#cf-wrapper .cf-button:hover {
+    background-color: #95b806;
 }
